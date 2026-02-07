@@ -13,3 +13,7 @@ The goal of this project is to create a simple system that helps users plan thie
 - Git / GitHub 
 ## Status 
 This project is under active development and is being built step by step as a learning-focused CS project.
+## How to run
+1. Clone the repository
+2. Run "python main.py"
+3. Follow the instructions in the terminal
