@@ -1,5 +1,6 @@
 from planner import calculate_daily_study
-print(calculate_daily_study(100, 10))
-print(calculate_daily_study(100, 0))
-print(calculate_daily_study(60, 6))
-print(calculate_daily_study(45, 9))
+pages = int(input("Enter total numbers of pages to study: "))
+days = int(input("Enter number of days available: "))
+dayly_pages = calculate_daily_study(pages, days)
+print("You should study", dayly_pages, "pages per day.")
+
