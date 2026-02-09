@@ -7,3 +7,10 @@ def calculate_total_daily_load(subjects):
     for subject in subjects:
         total += subject
     return total
+def calculate_priority(days_left):
+    if days_left <= 7:
+        return "HIGH"
+    elif days_left <= 30:
+        return "MEDIUM"
+    else:
+        return "LOW"
