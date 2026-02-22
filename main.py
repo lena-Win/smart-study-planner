@@ -15,3 +15,11 @@ from planner import calculate_priority
 days_left = int(input("Enter days left until exam: "))
 priority = calculate_priority(days_left)
 print("Exam priority:", priority)
+subjects = {
+    "Biology" : 12,
+    "Math" : 8,
+    "CS" : 6
+}
+for subject, load in subjects.items():
+    print(subject, "daily load", load)
+    
