@@ -14,3 +14,8 @@ def calculate_priority(days_left):
         return "MEDIUM"
     else:
         return "LOW"
+def calculate_daily_study(pages, days):
+    if pages <= 0 or days <= 0:
+        raise ValueError("Pages and days must be positive numbers")
+    return pages / days 
+

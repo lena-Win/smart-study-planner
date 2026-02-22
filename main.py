@@ -22,4 +22,9 @@ subjects = {
 }
 for subject, load in subjects.items():
     print(subject, "daily load", load)
+try:
+    daily_pages = calculate_daily_study(pages, days)
+    print("Daily pages:", daily_pages)
+except ValueError as error:
+    print("Error:", error)
     
