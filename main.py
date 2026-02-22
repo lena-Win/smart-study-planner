@@ -38,4 +38,17 @@ except ValueError as error:
     from storage import load_plan
     loaded_plan = load_plan("study_plan.json")
     print("Loaden plan:", loaded_plan)
-    
+    choice = input("Type  'new' to create plan or 'load' to load existing: ")
+    if choice == "new":
+        pages = int(input("Enter total number of pages: "))
+        days = int(input("Enter number of days: "))
+        plan = create_study_plan(pages, days)
+        save_plan("study_plan.json", plan)
+    elif choice == "load":
+        plan = load_plan("study_plan.json")
+        print("Loaded plan:", plan)
+    else:
+        print("Invalid choice")
+        
+                   
+
