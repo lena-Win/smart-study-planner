@@ -35,4 +35,7 @@ except ValueError as error:
     from storage import save_plan
     save_plan("study_plan.json", plan)
     print("Study plan saved.")
+    from storage import load_plan
+    loaded_plan = load_plan("study_plan.json")
+    print("Loaden plan:", loaded_plan)
     
