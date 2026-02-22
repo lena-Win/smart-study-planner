@@ -27,4 +27,9 @@ try:
     print("Daily pages:", daily_pages)
 except ValueError as error:
     print("Error:", error)
+    from planner import create_study_plan
+    pages = int(input("Enter total number of pages: "))
+    days = int(input("Enter number of days: "))
+    plan = create_study_plan(pages, days)
+    print("Daily pages:", plan["daily_pages"])
     

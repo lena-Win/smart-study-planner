@@ -18,4 +18,10 @@ def calculate_daily_study(pages, days):
     if pages <= 0 or days <= 0:
         raise ValueError("Pages and days must be positive numbers")
     return pages / days 
-
+def create_study_plan(pages, days):
+    daily = calculate_daily_study(pages, days)
+    return {
+        "total_pages": pages,
+        "days": days,
+        "dayly_pages": daily
+    }
