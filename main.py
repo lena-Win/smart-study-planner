@@ -32,4 +32,7 @@ except ValueError as error:
     days = int(input("Enter number of days: "))
     plan = create_study_plan(pages, days)
     print("Daily pages:", plan["daily_pages"])
+    from storage import save_plan
+    save_plan("study_plan.json", plan)
+    print("Study plan saved.")
     
