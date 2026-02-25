@@ -25,3 +25,15 @@ def create_study_plan(pages, days):
         "days": days,
         "dayly_pages": daily
     }
+def generate_schedule(total_pages, days):
+    daily = total_pages // days 
+    remainder = total_pages % days
+    schedule = []
+    for day in range(1, days + 1):
+        pages_today = daily 
+        if day <= remainder:
+            pages_today += 1 
+        schedule.append(pages_today)
+    return schedule
+
+        
