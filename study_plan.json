@@ -1,9 +1,16 @@
 {
-    "total_pages": 10,
-    "days": 3,
-    "dayly_pages": 3.3333333333333335,
+    "total_pages": 30,
+    "days": 10,
+    "dayly_pages": 3.0,
     "schedule": [
-        4,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
         3,
         3
     ]

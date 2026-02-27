@@ -35,5 +35,18 @@ def generate_schedule(total_pages, days):
             pages_today += 1 
         schedule.append(pages_today)
     return schedule
+def build_exam_plans(exams):
+    plans = []
+    for exam in exams:
+        daily_pages = calculate_daily_study(
+            exam["pages"],
+            exam["days_left"]
+        )
+        plans.append({
+            "subject": exam["subject"],
+            "daily_pages": daily_pages,
+            "days_left": exam["days_left"]
+        })
+    return plans    
 
         
