@@ -10,7 +10,7 @@ def calculate_total_daily_load(subjects):
 def calculate_priority(days_left):
     if days_left <= 7:
         return "HIGH"
-    elif days_left <= 30:
+    elif days_left <= 21:
         return "MEDIUM"
     else:
         return "LOW"
@@ -42,10 +42,12 @@ def build_exam_plans(exams):
             exam["pages"],
             exam["days_left"]
         )
+        priority = calculate_priority(exam["days_left"])
         plans.append({
             "subject": exam["subject"],
             "daily_pages": daily_pages,
-            "days_left": exam["days_left"]
+            "days_left": exam["days_left"],
+            "priority": priority
         })
     return plans    
 

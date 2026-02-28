@@ -20,7 +20,9 @@ exam_plans = build_exam_plans(exams)
 print("Exam overview:")
 for exam in exam_plans:
     print(
-        f"{exam['subject']} - {exam['daily_pages']:.1f} pages per day "
-        f"({exam['days_left']} days left)"
+        f"{exam['subject']} | "
+        f"{exam['daily_pages']:.1f} pages/day | "
+        f"{exam['days_left']} days left | "
+        f"PRIORITY: {exam['priority']}"
     )
     
