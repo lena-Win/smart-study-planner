@@ -1,12 +1,12 @@
-from planner import create_study_plan, generate_schedule
+from planner import create_study_plan, generate_schedule_with_dates
 from storage import save_plan
 pages = int(input("Enter total number of pages to study: "))
 days = int(input("Enter number of days available: "))
 plan = create_study_plan(pages, days)
-schedule = generate_schedule(plan["total_pages"], plan["days"])
+schedule = generate_schedule_with_dates(plan["total_pages"], plan["days"])
 print("Daily study schedule:")
-for index, pages_today in enumerate(schedule, start=1):
-    print(f"Day {index}: {pages_today} pages")
+for day in schedule:
+    print(day["date"], ":", day["pages"], "pages")
 plan["schedule"] = schedule
 save_plan("study_plan.json", plan)
 print("Study plan saved to study_plan.json")
@@ -25,4 +25,4 @@ for exam in exam_plans:
         f"{exam['days_left']} days left | "
         f"PRIORITY: {exam['priority']}"
     )
-    
+

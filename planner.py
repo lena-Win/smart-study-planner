@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 def calculate_daily_study(pages, days):
     if days <= 0:
         return "Invalid number of days"
@@ -50,5 +51,19 @@ def build_exam_plans(exams):
             "priority": priority
         })
     return plans    
-
+def generate_schedule_with_dates(total_pages, days):
+    daily = total_pages // days 
+    remainder = total_pages % days
+    schedule = []
+    start_date = date.today()
+    for i in range(days):
+        pages_today = daily
+        if i < remainder:
+            pages_today += 1
+        current_date = start_date + timedelta(days=i)    
+        schedule.append({
+            "date": current_date.isoformat(),
+            "pages": pages_today
+        })
+    return schedule    
         
