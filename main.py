@@ -11,9 +11,24 @@ plan["schedule"] = schedule
 save_plan("study_plan.json", plan)
 print("Study plan saved to study_plan.json")
 exams = [
-    {"subject": "Biology", "pages": 120, "days_left": 10},
-    {"subject": "Math", "pages": 80, "days_left": 20},
-    {"subject": "CS", "pages": 60, "days_left": 30}
+    {
+        "subject": "Biology",
+        "pages": 120,
+        "days_left": 10,
+        "difficulty": "MEDIUM"
+    },
+    {
+        "subject": "Mathematics",
+        "pages": 80,
+        "days_left": 20,
+        "difficulty": "HARD"
+    },
+    {
+        "subject": "Computer Science",
+        "pages": 60,
+        "days_left": 30,
+        "difficulty": "EASY"
+    }
 ]
 from planner import build_exam_plans
 exam_plans = build_exam_plans(exams)
@@ -23,6 +38,7 @@ for exam in exam_plans:
         f"{exam['subject']} | "
         f"{exam['daily_pages']:.1f} pages/day | "
         f"{exam['days_left']} days left | "
-        f"PRIORITY: {exam['priority']}"
+        f"PRIORITY: {exam['priority']} | "
+        f"DIFFICULTY: {exam['difficulty']}"
     )
 

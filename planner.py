@@ -1,4 +1,9 @@
 from datetime import date, timedelta
+DIFFICULTY_WEIGHTS = {
+    "EASY": 1,
+    "MEDIUM": 1.5,
+    "HARD": 2
+}
 def calculate_daily_study(pages, days):
     if days <= 0:
         return "Invalid number of days"
@@ -39,16 +44,19 @@ def generate_schedule(total_pages, days):
 def build_exam_plans(exams):
     plans = []
     for exam in exams:
-        daily_pages = calculate_daily_study(
+        base_daily = calculate_daily_study(
             exam["pages"],
             exam["days_left"]
         )
+        weight = DIFFICULTY_WEIGHTS.get(exam["difficulty"], 1)
+        daily_pages =  base_daily * weight
         priority = calculate_priority(exam["days_left"])
         plans.append({
             "subject": exam["subject"],
             "daily_pages": daily_pages,
             "days_left": exam["days_left"],
-            "priority": priority
+            "priority": priority,
+            "difficulty": exam["difficulty"]
         })
     return plans    
 def generate_schedule_with_dates(total_pages, days):
@@ -65,5 +73,5 @@ def generate_schedule_with_dates(total_pages, days):
             "date": current_date.isoformat(),
             "pages": pages_today
         })
-    return schedule    
+    return schedule 
         
