@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from planner import create_study_plan, generate_schedule_with_dates
+from planner import create_study_plan, generate_schedule_with_dates, calculate_priority
 subjects = []
 def genetate_plan():
     pages = int(pages_entry.get())
@@ -22,15 +22,17 @@ def add_subject():
     except ValueError:
         output_text.insert(tk.END, "Enter numbers for pages and days\n")
         return
+    priority = calculate_priority(days)
     subjects.append({
         "subject": subject,
         "pages": pages,
         "days_left": days,
-        "difficulty": difficulty
+        "difficulty": difficulty,
+        "priority":priority
     })
     subjects_list.insert(
         tk.END,
-        f"{subject} | {difficulty} | {pages} pages | {days} days"
+        f"{subject} | {difficulty} | {pages} pages | {days} days | PRIORITY: {priority}"
     )
     subject_entry.delete(0, tk.END)
     pages_entry.delete(0, tk.END)
