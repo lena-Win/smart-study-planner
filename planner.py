@@ -74,4 +74,21 @@ def generate_schedule_with_dates(total_pages, days):
             "pages": pages_today
         })
     return schedule 
-        
+def generate_daily_plan(subjects):
+    plan = []
+    for subject in subjects:
+        pages = subject["pages"]
+        days = subject["days_left"]
+        difficulty = subject["difficulty"]
+        pages_per_day = pages // days
+        if difficulty == "HARD":
+            pages_per_day = max(1, pages_per_day - 1)
+        elif difficulty == "EASY":
+            pages_per_day += 1
+        plan.append({
+            "subject": subject["subject"],
+            "pages_today": pages_per_day,
+            "priority": subject["priority"]
+        }) 
+    plan.sort(key=lambda x: x["priority"], reverse=True)    
+    return plan 

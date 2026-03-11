@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from planner import create_study_plan, generate_schedule_with_dates, calculate_priority
+from planner import create_study_plan, generate_schedule_with_dates, calculate_priority, generate_daily_plan
 subjects = []
 def genetate_plan():
     pages = int(pages_entry.get())
@@ -36,7 +36,16 @@ def add_subject():
     )
     subject_entry.delete(0, tk.END)
     pages_entry.delete(0, tk.END)
-    days_entry.delete(0, tk.END)       
+    days_entry.delete(0, tk.END)
+def generate_best_plan():
+    output_text.delete("1.0", tk.END)  
+    plan = generate_daily_plan(subjects)
+    for item in plan:
+        output_text.insert(
+            tk.END,
+            f"{item["subject"]} -> {item["pages_today"]} pages today | priority {item["priority"]}\n"
+                                    
+        )     
 window = tk.Tk()    
 window.title("Smart Study Planner") 
 window.geometry("500x650")  
@@ -63,4 +72,5 @@ difficulty_menu = ttk.Combobox(
 difficulty_menu.pack()
 subjects_list = tk.Listbox(window, width=50, height=8)
 subjects_list.pack(pady=10)
+tk.Button(window, text="Best plan today", command=generate_best_plan).pack(padx=10)
 window.mainloop()
