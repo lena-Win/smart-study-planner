@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Study Planner</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<h1>Smart Study Planner</h1>
+<form method="POST">
+<input name="subject" placeholder="Subject">
+<input name="pages" placeholder="Pages">
+<input name="days" placeholder="Days">
+<select name="difficulty">
+<option value="EASY">EASY</option>
+<option value="MEDIUM">MEDIUM</option>
+<option value="HARD">HARD</option>
+</select>
+<button type="submit">Add subject</button>
+</form>
+<h2>Today's plan</h2>
+<ul>
+{% for item in plan %}
+<li>
+{{ item.subject }} - study {{ item.pages_today }} pages
+</li>
+{% endfor %}
+</ul>
+</body>
+</html>

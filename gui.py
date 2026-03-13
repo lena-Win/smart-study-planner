@@ -43,7 +43,7 @@ def generate_best_plan():
     for item in plan:
         output_text.insert(
             tk.END,
-            f"{item["subject"]} -> {item["pages_today"]} pages today | priority {item["priority"]}\n"
+            f"{item["subject"]} -> {item["pages_today"]} pages today | priority  {item["priority"]}\n"
                                     
         )     
 window = tk.Tk()    
