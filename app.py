@@ -1,19 +1,30 @@
-from flask import Flask, render_template, request
-from planner import calculate_daily_study
+from flask import Flask, render_template, request, send_file
+from planner import calculate_daily_study, calculate_priority
+from pdf_export import export_plan_to_pdf
 app = Flask(__name__)
+subjects = []
 @app.route("/", methods=["GET", "POST"])
 def home():
-    plan = []
     if request.method == "POST":
         subject = request.form.get("subject")
-        pages = int(request.form.get("pages"))
-        days = int(request.form.get("days"))
+        pages = request.form.get("pages")
+        days = request.form.get("days")
         difficulty = request.form.get("difficulty")
-        pages_today = calculate_daily_study(pages, days)
-        plan.append({
-        "subject": subject,
-        "pages_today": pages_today,
-        })
-    return render_template("index.html", plan=plan)
+        if subject and pages and days:
+            pages = int(pages)
+            days = int(days)
+            pages_today = calculate_daily_study(pages, days)
+            priority = calculate_priority(days)
+            subjects.append({
+                "subject": subject,
+                "pages_today": pages_today,
+                "difficulty": difficulty,
+                "priority": priority
+            })
+    return render_template("index.html", plan=subjects)
+@app.route("/download")
+def download():
+    pdf_file = export_plan_to_pdf(subjects)
+    return send_file(pdf_file, as_attachment=True)
 if __name__ == "__main__":
     app.run(debug=True)

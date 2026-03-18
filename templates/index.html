@@ -2,28 +2,75 @@
 <html>
 <head>
     <title>Smart Study Planner</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>   
 </head>
-<body>
-<h1>Smart Study Planner</h1>
-<form method="POST">
-<input name="subject" placeholder="Subject">
-<input name="pages" placeholder="Pages">
-<input name="days" placeholder="Days">
-<select name="difficulty">
+<body class="bd-gray-100 font-sans">
+<div class="max-x-4xl mx-auto p-6">
+<h1 class="text-3xl font-bold mb-6">
+Smart Study Planner
+<h1>
+<form method="POST" class="bg-white p-6 rounded-x1 shadow-md mb-8">
+<h2 class="text-x1 font-semibold mb-4">
+<div class="grid grid-cols-2 gap-4">
+<input name="subject" 
+placeholder="Subject"
+class="border p-2 rounded">
+<input name="pages"
+placeholder="Pages"
+class="border p-2 rounded">
+<input name="days"
+placeholder="Days"
+class="border p-2 rounded">
+<select name="difficulty" class="border p-2 rounded">
 <option value="EASY">EASY</option>
 <option value="MEDIUM">MEDIUM</option>
 <option value="HARD">HARD</option>
 </select>
-<button type="submit">Add subject</button>
+<div>
+<button
+class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+Add subject
+</button>
 </form>
-<h2>Today's plan</h2>
-<ul>
+<h2 class="text-2xl font-semibold mb-4">
+Today's Study Plan
+</h2>
+<div class="grid md:grid-cols-2 gap-4">
 {% for item in plan %}
-<li>
-{{ item.subject }} - study {{ item.pages_today }} pages
-</li>
+<div class="bg-white p-5 rounded-x1 shadow">
+<div class="flex justify-between items-center">
+<h3 class="text-lg font-bold">
+{{ item.subject }}
+</h3>
+{% if item.priority == "HIGH" %}
+<span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded">
+HIGH priority
+</span>
+{% elif item.priority == "MEDIUM" %}
+<span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-1 rounded">
+MEDIUM priority
+</span>
+{% else %}
+<span class="inline-block text-xs font-semibold px-2 py-1 rounded"
+style="background-color: aquamarine;">
+LOW priority
+</span>
+{% endif %}
+</div>
+<p class="text-gray-600 mt-2">
+Study {{ item.pages_today }} pages
+</p>
+</div>
 {% endfor %}
-</ul>
+</div>
+<div class="mt-8">
+<a href="/download">
+<button type="button"
+class="bg-green-500 text-white px-6 py-3 rounded-x1 shadow hover:bg-green-600 transition">
+Download Study Plan PDF
+</button>
+</a>
+</div>
+</div>
 </body>
 </html>
