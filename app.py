@@ -21,7 +21,17 @@ def home():
                 "difficulty": difficulty,
                 "priority": priority
             })
-    return render_template("index.html", plan=subjects)
+    priority_order = {
+        "HIGH": 3,
+        "MEDIUM": 2,
+        "LOW": 1
+    }
+    sorted_subjects = sorted(
+        subjects,
+        key=lambda x: (priority_order[x["priority"]], x["pages_today"]),
+        reverse=True
+    )
+    return render_template("index.html", plan=sorted_subjects)
 @app.route("/download")
 def download():
     pdf_file = export_plan_to_pdf(subjects)
