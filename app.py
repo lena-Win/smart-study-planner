@@ -31,7 +31,18 @@ def home():
         key=lambda x: (priority_order[x["priority"]], x["pages_today"]),
         reverse=True
     )
-    return render_template("index.html", plan=sorted_subjects)
+    total_subjects = len(subjects)
+    total_pages_today = sum(s["pages_today"] for s in subjects)
+    high_priority_count = sum(
+        1 for s in subjects if s ["priority"] == "HIGH"
+    )
+    return render_template(
+        "index.html", 
+        plan=sorted_subjects,
+        total_subjects=total_subjects,
+        total_pages_today=total_pages_today,
+        high_priority_count=high_priority_count
+    )
 @app.route("/download")
 def download():
     pdf_file = export_plan_to_pdf(subjects)
