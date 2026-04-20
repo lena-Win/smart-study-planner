@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for
 from planner import calculate_daily_study, calculate_priority
 from pdf_export import export_plan_to_pdf
 from storage import load_subjects, save_subjects
@@ -24,6 +24,7 @@ def home():
 
             })
             save_subjects(subjects)
+            return redirect(url_for("home"))
     priority_order = {
         "HIGH": 3,
         "MEDIUM": 2,
