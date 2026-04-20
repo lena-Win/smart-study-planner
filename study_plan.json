@@ -1,20 +1,9 @@
 [
     {
-        "subject": "Math",
-        "pages_today": 7,
-        "difficulty": "HARD",
-        "priority": "LOW"
-    },
-    {
+        "id": "688ba308-97af-4d32-92ba-860bbb601d48",
         "subject": "HISTORY",
-        "pages_today": 30,
-        "difficulty": "MEDIUM",
-        "priority": "MEDIUM"
-    },
-    {
-        "subject": "Biology",
         "pages_today": 100,
-        "difficulty": "HARD",
+        "difficulty": "MEDIUM",
         "priority": "HIGH"
     }
 ]
