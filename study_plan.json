@@ -1,51 +1,20 @@
-{
-    "total_pages": 120,
-    "days": 11,
-    "dayly_pages": 10.909090909090908,
-    "schedule": [
-        {
-            "date": "2026-03-04",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-05",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-06",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-07",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-08",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-09",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-10",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-11",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-12",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-13",
-            "pages": 11
-        },
-        {
-            "date": "2026-03-14",
-            "pages": 10
-        }
-    ]
-}
+[
+    {
+        "subject": "Math",
+        "pages_today": 40,
+        "difficulty": "HARD",
+        "priority": "MEDIUM"
+    },
+    {
+        "subject": "HISTORY",
+        "pages_today": 4,
+        "difficulty": "MEDIUM",
+        "priority": "LOW"
+    },
+    {
+        "subject": "Biology",
+        "pages_today": 75,
+        "difficulty": "HARD",
+        "priority": "HIGH"
+    }
+]

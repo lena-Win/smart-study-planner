@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, send_file
 from planner import calculate_daily_study, calculate_priority
 from pdf_export import export_plan_to_pdf
+from storage import load_subjects, save_subjects
 app = Flask(__name__)
-subjects = []
+subjects = load_subjects()
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
@@ -20,7 +21,9 @@ def home():
                 "pages_today": pages_today,
                 "difficulty": difficulty,
                 "priority": priority
+
             })
+            save_subjects(subjects)
     priority_order = {
         "HIGH": 3,
         "MEDIUM": 2,
