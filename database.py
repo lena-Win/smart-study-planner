@@ -18,6 +18,21 @@ def init_db():
         priority TEXT NOT NULL
     )
     """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS analytics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
     conn.commit()
     conn.close()
     print("Table ready")
+def track_event(event_name):
+    conn = get_connection()
+    conn.execute(
+        "INSERT INTO analytics (event) VALUES (?)",
+        (event_name,)
+    )
+    conn.commit()
+    conn.close()
