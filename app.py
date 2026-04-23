@@ -27,8 +27,8 @@ def home():
                 (subject, pages_today, difficulty, priority)
             )
             conn.commit()
-            track_event("add_subject")
             conn.close()
+            track_event("add_subject")
             return redirect(url_for("home"))
     conn = get_connection()
     subjects = conn.execute("SELECT * FROM subjects").fetchall()
@@ -60,14 +60,14 @@ def delete(item_id):
     conn = get_connection()
     conn.execute("DELETE FROM subjects WHERE id = ?", (item_id,))
     conn.commit()
-    track_event("delete_subject")
     conn.close()
+    track_event("delete_subject")
     return redirect("/")
 @app.route("/download")
 def download():
     conn = get_connection()
     subjects = conn.execute("SELECT * FROM subjects"). fetchall()
-    conn.close
+    conn.close()
     pdf_file = export_plan_to_pdf(subjects)
     track_event("download_pdf")
     return send_file(pdf_file, as_attachment=True)
@@ -81,7 +81,7 @@ def analytics():
         "SELECT COUNT(*) FROM analytics WHERE event = 'add_subject'"
     ). fetchone()[0]
     total_deletes = conn.execute(
-        "SELECT COUNT(*) FROM analytics WHWRE event = ' delete_subject'"
+        "SELECT COUNT(*) FROM analytics WHERE event = 'delete_subject'"
     ). fetchone()[0]
     total_downloads = conn.execute(
         "SELECT COUNT(*) FROM analytics WHERE event = 'download_pdf'"
@@ -91,8 +91,8 @@ def analytics():
         "analytics.html",
         visits=total_visits,
         adds=total_adds,
-        delete=total_downloads,
-        download=total_downloads
+        deletes=total_deletes,
+        downloads=total_downloads
     )
 if __name__ == "__main__":
     app.run(debug=True)

@@ -4,29 +4,29 @@
     <title>Smart Study Planner</title>
     <script src="https://cdn.tailwindcss.com"></script>   
 </head>
-<body class="bd-gray-100 font-sans">
-<div class="max-x-4xl mx-auto p-6">
+<body class="bg-gray-100 font-sans">
+<div class="max-w-4xl mx-auto p-6">
 <h1 class="text-3xl font-bold mb-6">
 Smart Study Planner
 <h1>
 <div class="grid grid-cols-3 gap-4 mb-6">
-<div class="bg-white p-4 rounded-x1 shadow text-center">
+<div class="bg-white p-4 rounded-xl shadow text-center">
 <p class="text-gray-500 text-sm">Subjects</p>
 <p class="text-2xl font-bold">{{ total_subjects }}</p>
 </div>
-<div class="bg-white p-4 rounded-x1 shadow text-center">
+<div class="bg-white p-4 rounded-xl shadow text-center">
 <p class="text-gray-500 text-sm">Pages today</p>
 <p class="text-2xl font-bold">{{ total_pages_today }}</p>
 </div>
-<div class="bg-white p-4 rounded-x1 shadow text-center">
+<div class="bg-white p-4 rounded-xl shadow text-center">
 <p class="text-gray-500 text-sm">High priority</p>
 <p class="text-2xl font-bold text-red-600">
 {{ high_priority_count }}
 </p>
 </div>
 </div>
-<form method="POST" class="bg-white p-6 rounded-x1 shadow-md mb-8">
-<h2 class="text-x1 font-semibold mb-4">
+<form method="POST" class="bg-white p-6 rounded-xl shadow-md mb-8">
+<h2 class="text-xl font-semibold mb-4">
 <div class="grid grid-cols-2 gap-4">
 <input name="subject" 
 placeholder="Subject"
@@ -53,7 +53,7 @@ Today's Study Plan
 </h2>
 <div class="grid md:grid-cols-2 gap-4">
 {% for item in plan %}
-<div class="bg-white p-5 rounded-x1 shadow">
+<div class="bg-white p-5 rounded-xl shadow">
 <div class="flex justify-between items-center">
 <h3 class="text-lg font-bold">
 {{ item.subject }}
@@ -88,10 +88,17 @@ Delete
 <div class="mt-8">
 <a href="/download">
 <button type="button"
-class="bg-green-500 text-white px-6 py-3 rounded-x1 shadow hover:bg-green-600 transition">
+class="bg-green-600 text-white px-6 py-3 rounded-xl shadow hover:bg-green-600 transition">
 Download Study Plan PDF
 </button>
 </a>
+<a href="/analytics">
+<button type="button"
+class="bg-purple-600 text-white px-6 py-3 rounded-xl shadow hover:bg-purple-600 transition">
+View Analytics 
+</button>
+</a>
+</div>
 </div>
 </div>
 </body>
