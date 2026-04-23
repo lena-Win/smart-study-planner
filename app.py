@@ -1,12 +1,16 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file, redirect, url_for, session
 from planner import calculate_daily_study, calculate_priority
 from pdf_export import export_plan_to_pdf
 import uuid
 from database import init_db, get_connection, track_event
+from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
+app.secret_key = "supersecretkey444"
 init_db()
 @app.route("/", methods=["GET", "POST"])
 def home():
+    if "user_id" not in session:
+        return redirect("/login")
     track_event("page_visit")
     if request.method == "POST":
         subject = request.form.get("subject")
@@ -19,19 +23,22 @@ def home():
             pages_today = calculate_daily_study(pages, days)
             priority = calculate_priority(days)
             conn = get_connection()
-            conn.execute(
-                """
-                INSERT INTO subjects (subject, pages_today, difficulty, priority)
-                VALUES (?, ?, ?, ?)
-                """, 
-                (subject, pages_today, difficulty, priority)
-            )
+            conn.execute("""
+                INSERT INTO subjects (user_id, subject, pages_today, difficulty, priority)
+                VALUES (?, ?, ?, ?, ?)
+                """, (
+                    session["user_id"],
+                    subject, 
+                    pages_today, 
+                    difficulty, 
+                    priority
+            ))
             conn.commit()
             conn.close()
             track_event("add_subject")
             return redirect(url_for("home"))
     conn = get_connection()
-    subjects = conn.execute("SELECT * FROM subjects").fetchall()
+    subjects = conn.execute("SELECT * FROM subjects WHERE user_id = ?").fetchall()
     conn.close()
     priority_order = {
         "HIGH": 3,
@@ -66,7 +73,7 @@ def delete(item_id):
 @app.route("/download")
 def download():
     conn = get_connection()
-    subjects = conn.execute("SELECT * FROM subjects"). fetchall()
+    subjects = conn.execute("SELECT * FROM subjects WHERE user_id = ?"). fetchall()
     conn.close()
     pdf_file = export_plan_to_pdf(subjects)
     track_event("download_pdf")
@@ -94,5 +101,42 @@ def analytics():
         deletes=total_deletes,
         downloads=total_downloads
     )
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        hashed = generate_password_hash(password)
+        conn = get_connection()
+        try:
+            conn.execute(
+                "INSERT INTO users (username, password) VALUES (?, ?)",
+                (username, hashed)
+            )
+            conn.commit()
+        except:
+            return "User already exists"
+    return render_template("register.html")
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        conn = get_connection()
+        user = conn.execute(
+            "SELECT *FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+        conn.close()
+        if user and check_password_hash(user["password"], password):
+            session["user_id"] = user["id"]
+            session["username"] = user["username"]
+            return redirect("/")
+        return "Inwalid login"
+    return render_template("login.html")
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 if __name__ == "__main__":
     app.run(debug=True)

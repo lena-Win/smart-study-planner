@@ -8,12 +8,13 @@ def get_connection():
 def init_db():
     conn = get_connection()
     conn.execute("""
-     CREATE TABLE IF NOT EXISTS subjects (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        subject TEXT NOT NULL,
-        pages_today INTEGER NOT NULL,
-        difficulty TEXT NOT NULL,
-        priority TEXT NOT NULL
+        CREATE TABLE IF NOT EXISTS subjects (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT NOT NULL,
+            subject TEXT NOT NULL,
+            pages_today INTEGER NOT NULL,
+            difficulty TEXT NOT NULL,
+            priority TEXT NOT NULL
     )
     """)
     conn.execute("""
@@ -21,6 +22,13 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             event TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
     )
     """)
     conn.commit()
