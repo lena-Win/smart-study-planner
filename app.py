@@ -38,7 +38,10 @@ def home():
             track_event("add_subject")
             return redirect(url_for("home"))
     conn = get_connection()
-    subjects = conn.execute("SELECT * FROM subjects WHERE user_id = ?").fetchall()
+    subjects = conn.execute(
+        "SELECT * FROM subjects WHERE user_id = ?",
+        (session["user_id"],)
+    ).fetchall()
     conn.close()
     priority_order = {
         "HIGH": 3,
@@ -73,7 +76,10 @@ def delete(item_id):
 @app.route("/download")
 def download():
     conn = get_connection()
-    subjects = conn.execute("SELECT * FROM subjects WHERE user_id = ?"). fetchall()
+    subjects = conn.execute(
+        "SELECT * FROM subjects WHERE user_id = ?",
+        (session["user_id"],)
+    ). fetchall()
     conn.close()
     pdf_file = export_plan_to_pdf(subjects)
     track_event("download_pdf")
