@@ -4,7 +4,18 @@ from pdf_export import export_plan_to_pdf
 import uuid
 from database import init_db, get_connection, track_event
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
+import os
 app = Flask(__name__)
+app.secret_key = "supersecretkey"
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = "smartstudyplanner777@gmail.com"
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+mail = Mail(app)
+serializer = URLSafeTimedSerializer(app.secret_key)
 app.secret_key = "supersecretkey444"
 init_db()
 @app.route("/", methods=["GET", "POST"])
@@ -112,11 +123,12 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        email = request.form["email"]
         hashed = generate_password_hash(password)
         conn = get_connection()
         try:
             conn.execute(
-                "INSERT INTO users (username, password) VALUES (?, ?)",
+                "INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
                 (username, hashed)
             )
             conn.commit()
@@ -144,5 +156,53 @@ def login():
 def logout():
     session.clear()
     return redirect("/login")
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form["email"]
+        conn = get_connection()
+        user = conn.execute(
+            "SELECT * FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+        conn.close()
+        if user:
+            token = serializer.dumps(email, salt="reset-password")
+            link = url_for(
+                "reset_token",
+                token=token,
+                _external=True
+            )
+            msg = Message(
+                "Password Reset",
+                sender=app.config["MAIL_USERNAME"],
+                recipients=[email]
+            )
+            msg.body = f"Click this link to reset password:\n{link}"
+            mail.send(msg)
+        return "If email exists, reset link sent."
+    return render_template("forgot_password.html")
+@app.route("/reset/<token>", methods=["GET", "POST"])
+def reset_token(token):
+    try:
+        email = serializer.loads(
+            token,
+            salt="reset-password",
+            max_age=3600
+        )
+    except:
+        return "Invalid or expired link"
+    if request.method == "POST":
+        password = request.form["password"]
+        hashed = generate_password_hash(password)
+        conn = get_connection()
+        conn.execute(
+            "UPDATE users SET password = ? WHERE email = ?",
+            (hashed, email)
+        )
+        conn.commit()
+        conn.close()
+        return redirect("/login")
+    return render_template("reset_token.html")
 if __name__ == "__main__":
     app.run(debug=True)
