@@ -7,16 +7,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import os
+print("APP FILE STARTED")
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USERNAME"] = "smartstudyplanner777@gmail.com"
 app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 mail = Mail(app)
-serializer = URLSafeTimedSerializer(app.secret_key)
 app.secret_key = "supersecretkey444"
+serializer = URLSafeTimedSerializer(app.secret_key)
 init_db()
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -120,6 +120,8 @@ def analytics():
     )
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if "user_id" in session:
+        return redirect("/")
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -129,10 +131,13 @@ def register():
         try:
             conn.execute(
                 "INSERT INTO users (username, password, email) VALUES (?, ?, ?)",
-                (username, hashed)
+                (username, hashed, email)
             )
             conn.commit()
+            conn.close()
+            return redirect("/login")
         except:
+            conn.close()
             return "User already exists"
     return render_template("register.html")
 @app.route("/login", methods=["GET", "POST"])
@@ -142,7 +147,7 @@ def login():
         password = request.form["password"]
         conn = get_connection()
         user = conn.execute(
-            "SELECT *FROM users WHERE username = ?",
+            "SELECT * FROM users WHERE username = ?",
             (username,)
         ).fetchone()
         conn.close()
@@ -160,26 +165,31 @@ def logout():
 def forgot_password():
     if request.method == "POST":
         email = request.form["email"]
+        print("EMAIL:", email)
         conn = get_connection()
         user = conn.execute(
             "SELECT * FROM users WHERE email = ?",
             (email,)
         ).fetchone()
         conn.close()
+        print("USER", user)
         if user:
             token = serializer.dumps(email, salt="reset-password")
-            link = url_for(
-                "reset_token",
-                token=token,
-                _external=True
-            )
+            link = url_for("reset_token", token=token, _external=True)
+            print("RESET LINK:", link)
+            print("MAIL USERNAME:", app.config["MAIL_USERNAME"])
+            print("MAIL PASSWORD EXISTS:", bool(app.config["MAIL_PASSWORD"]))
             msg = Message(
                 "Password Reset",
                 sender=app.config["MAIL_USERNAME"],
                 recipients=[email]
             )
             msg.body = f"Click this link to reset password:\n{link}"
-            mail.send(msg)
+            try:
+                mail.send(msg)
+                print("EMAIL SENT SUCCESSFULLY")
+            except Exception as e:
+                print("EMAIL ERROR:", e)
         return "If email exists, reset link sent."
     return render_template("forgot_password.html")
 @app.route("/reset/<token>", methods=["GET", "POST"])
