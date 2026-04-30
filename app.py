@@ -155,7 +155,7 @@ def login():
             session["user_id"] = user["id"]
             session["username"] = user["username"]
             return redirect("/")
-        return "Inwalid login"
+        return "Invalid login"
     return render_template("login.html")
 @app.route("/logout")
 def logout():

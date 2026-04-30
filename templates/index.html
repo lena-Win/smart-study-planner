@@ -1,105 +1,172 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Smart Study Planner</title>
-    <script src="https://cdn.tailwindcss.com"></script>   
-</head>
-<body class="bg-gray-100 font-sans">
-<div class="max-w-4xl mx-auto p-6">
-<h1 class="text-3xl font-bold mb-6">
-Smart Study Planner
-<h1>
-<div class="grid grid-cols-3 gap-4 mb-6">
-<div class="bg-white p-4 rounded-xl shadow text-center">
-<p class="text-gray-500 text-sm">Subjects</p>
-<p class="text-2xl font-bold">{{ total_subjects }}</p>
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+.orb{
+position:absolute;
+border-radius:9999px;
+filter: blur(60px);
+opacity:.45;
+z-index:0;
+}
+.orb-1{
+width:220px;
+height:220px;
+background:#b7dbff;
+top:40px;
+left:30px;
+}
+.orb-2{
+width:260px;
+height:260px;
+background:#b9e4c8;
+right:50px;
+top:120px;
+}
+.orb-3{
+width:180px;
+height:180px;
+background:#e6d7ff;
+bottom:40px;
+left:35%;
+}
+@keyframes floatSlow {
+0% { transform: translateY(0px) translateX(0px); }
+50% { transform: translateY(-25px) translateX(12px); }
+100% { transform: translateY(0px) translateX(0px); }
+}
+@keyframes pulseGlow {
+0% {  opacity: .35; }
+50% { opacity: .55; }
+100% { opacity: .35; }
+}
+.orb{
+animation: floatSlow 10s ease-in-out infinite,
+pulseGlow 6s ease-in-out infinite;
+}
+.glass:hover{
+transform: translateY(-2px);
+transition: all .3s ease;
+box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="max-w-6xl mx-auto px-6 py-10 relative z-10">
+<!--HEADER-->
+<div class="glass rounded-3xl p-6 mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+<div>
+<h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">
+Study Zen
+</h1>
+<p class="text-gray-600 mt-2">
+Calm planning for ambitious minds.
+</p>
 </div>
-<div class="bg-white p-4 rounded-xl shadow text-center">
-<p class="text-gray-500 text-sm">Pages today</p>
-<p class="text-2xl font-bold">{{ total_pages_today }}</p>
+<div class="flex gap-3">
+<a href="/analytics">
+<button class="px-5 py-3 rounded-full bg-white/70 hover:bg-white transition shadow hover:scale-[1.02] active:scale-[0.98] transition duration-200">
+Analytics
+</button>
+</a>
+<a href="/logout">
+<button class="px-5 py-3 rounded-full bg-gray-900 text-white hover:scale-[1.02] active:scale-[0.98] transition duration-200">
+Logout
+</button>
+</a>
 </div>
-<div class="bg-white p-4 rounded-xl shadow text-center">
-<p class="text-gray-500 text-sm">High priority</p>
-<p class="text-2xl font-bold text-red-600">
-{{ high_priority_count }}
+</div>
+<!--STATS-->
+<div class="grid md:grid-cols-3 gap-5 mb-8">
+<div class="glass rounded-3xl p-6">
+<p class="text-sm text-gray-500">Subjects</p>
+<p class="text-4xl font-bold mt-2">{{ total_subjects }}</p>
+</div>
+<div class="glass rounded-3xl p-6">
+<p class="text-sm text-gray-500">Pages Today</p>
+<p class="text-4xl font-bold mt-2">{{ total_pages_today }}</p>
+</div>
+<div class="glass rounded-3xl p-6">
+<p class="text-sm text-gray-500">High Priority</p>
+<p class="text-4xl font-bold mt-2 text-rose-700">
+{{ high_priority_count}}
 </p>
 </div>
 </div>
-<form method="POST" class="bg-white p-6 rounded-xl shadow-md mb-8">
-<h2 class="text-xl font-semibold mb-4">
-<div class="grid grid-cols-2 gap-4">
-<input name="subject" 
-placeholder="Subject"
-class="border p-2 rounded">
-<input name="pages"
-placeholder="Pages"
-class="border p-2 rounded">
-<input name="days"
-placeholder="Days"
-class="border p-2 rounded">
-<select name="difficulty" class="border p-2 rounded">
-<option value="EASY">EASY</option>
-<option value="MEDIUM">MEDIUM</option>
-<option value="HARD">HARD</option>
-</select>
-<div>
-<button
-class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-Add subject
-</button>
-</form>
-<h2 class="text-2xl font-semibold mb-4">
-Today's Study Plan
+<!--FORM-->
+<div class="glass rounded-3xl p-8 mb-10">
+<h2 class="text-2xl font-bold mb-2">
+What deserves your energy today?
 </h2>
-<div class="grid md:grid-cols-2 gap-4">
+<p class="text-gray-600 mb-2">
+Create a focused plan in seconds
+</p>
+<form method="POST" class="grid md:grid-cols-2 gap-4">
+<input name="subject" placeholder="Subject"
+class="p-3 rounded-2xl border border-white/40 bg-white/60 outline-none">
+<input name="pages" placeholder="Pages"
+class="p-3 rounded-2xl border border-white/40 bg-white/60 outline-none">
+<input name="days" placeholder="Days left"
+class="p-3 rounded-2xl border border-white/40 bg-white/60 outline-none">
+<select name="difficulty"
+class="p-3 rounded-2xl border border-white/40 bg-white/60 outline-none">
+<option value="EASY">Easy</option>
+<option value="MEDIUM">Medium</option>
+<option value="HARD">Hard</option>
+</select>
+<div class="md:col-span-2">
+<button class="w-full py-4 rounded-2xl bg-gray-900 text-white font-semibold hover:scale-[1.02] active:scale-[0.98] transition duration-200">
+Add Subject
+</button>
+</div>
+</form>
+</div>
+<!--PLAN-->
+<h2 class="text-3xl md:text-3xl font-bold mb-5 text-gray-900">
+Today's Flow
+</h2>
+<div class="grid md:grid-cols-2 gap-5">
 {% for item in plan %}
-<div class="bg-white p-5 rounded-xl shadow">
+<div class="glass rounded-3xl p-6">
 <div class="flex justify-between items-center">
-<h3 class="text-lg font-bold">
+<h3 class="text-xl font-bold">
 {{ item.subject }}
 </h3>
 {% if item.priority == "HIGH" %}
-<span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded">
-HIGH priority
+<span class="px-3 py-1 rounded-full text-xs bg-rose-100 text-rose-700 font-semibold">
+HIGH
 </span>
 {% elif item.priority == "MEDIUM" %}
-<span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-1 rounded">
-MEDIUM priority
+<span class="px-3 py-1 rounded-full text-xs bg-amber-100 text-amber-700 font-semibold">
+MEDIUM
 </span>
 {% else %}
-<span class="inline-block text-xs font-semibold px-2 py-1 rounded"
-style="background-color: aquamarine;">
-LOW priority
+<span class="px-3 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700 font-semibold">
+LOW
 </span>
 {% endif %}
 </div>
-<p class="text-gray-600 mt-2">
-Study {{ item.pages_today }} pages
+<p class="text-gray-600 mt-3">
+Study {{ item.pages_today }} pages today
 </p>
-<a href="/delete/{{ item.id }}">
-<button type="button"
-class="mt-3 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+<a href="/delete/{{ item.id }}"
+onclick="return confirm('Delete this subject?')">
+<button class="mt-5 px-4 py-2 rounded-full bg-white/70 hover:bg-white hover:scale-[1.02] active:scale-[0.98] transition duration-200">
 Delete
 </button>
 </a>
 </div>
 {% endfor %}
 </div>
-<div class="mt-8">
+<!--ACTIONS-->
+<div class="mt-10">
 <a href="/download">
-<button type="button"
-class="bg-green-600 text-white px-6 py-3 rounded-xl shadow hover:bg-green-600 transition">
-Download Study Plan PDF
-</button>
-</a>
-<a href="/analytics">
-<button type="button"
-class="bg-purple-600 text-white px-6 py-3 rounded-xl shadow hover:bg-purple-600 transition">
-View Analytics 
+<button class="px-7 py-4 rounded-full bg-emerald-700 text-white shadow hover:scale-[1.02] active:scale-[0.98] transition duration-200">
+Download PDF plan
 </button>
 </a>
 </div>
 </div>
-</div>
-</body>
-</html>
+{% endblock %}

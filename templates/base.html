@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Zen</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3176/3176363.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+body{
+font-family:'Manrope', sans-serif;
+background: linear-gradient(135deg, #eef7ff,#edf8ef,#f5efff);
+min-height:100vh;
+}
+.glass{
+background: rgba(255,255,255,0.4);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border:1px solid rgba(255,255,255,0.25);
+box-shadow:
+0 8px 32px rgba(0,0,0,0.08),
+inset 0 1px 0 rgba(255,255,255,0.6);
+}
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body class="px-6 overflow-x-hidden">
+{% block content %}{% endblock %}
+</body>
+</html>

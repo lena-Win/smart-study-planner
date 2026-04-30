@@ -1,5 +1,5 @@
-# Smart Study Planner
-Smart Study Planner is a Python console application that helps students plan their study time efficiently by breaking learning material into manageable daily tasks.
+# Study Zen
+Study Zen is a Python console application that helps students plan their study time efficiently by breaking learning material into manageable daily tasks.
 
 ## Project goal
 The goal of this project is to build a simple system but extensible study planning system that calculates daily study workload and helps manage multiple exams based on urgency and available time.

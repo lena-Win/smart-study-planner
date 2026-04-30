@@ -47,7 +47,7 @@ def generate_best_plan():
                                     
         )     
 window = tk.Tk()    
-window.title("Smart Study Planner") 
+window.title("Study Zen") 
 window.geometry("500x650")  
 tk.Label(window, text="Total pages to study").pack() 
 pages_entry = tk.Entry(window)

@@ -1,24 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-<form method="POST" class="bg-white p-8 rounded-xl shadow w-96">
-<h1 class="text-2xl font-bold mb-6">Register</h1>
-<input name="username" placeholder="Username"
-class="w-full border p-2 rounded mb-4">
-<input name="password" type="password" placeholder="Password"
-class="w-full border p-2 rounded mb-4">
-<input name="email" placeholder="Email"
-class="w-full border p-2 rounded mb-4">
-<button type="submit"
-class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
-Create account
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+.orb{
+position:absolute;
+border-radius:9999px;
+filter: blur(60px);
+opacity:.45;
+}
+.orb1{
+width:220px;
+height:220px;
+background:#b7dbff;
+top:30px;
+left:30px;
+}
+.orb2{
+width:260px;
+height:260px;
+background:#c7f0d3;
+right:40px;
+bottom:50px;
+}
+.orb3{
+width:180px;
+height:180px;
+background:#eadcff;
+top:48%;
+left:45%;
+}
+@keyframes floatSlow {
+0% { transform: translateY(0px) translateX(0px); }
+50% { transform: translateY(-25px) translateX(12px); }
+100% { transform: translateY(0px) translateX(0px); }
+}
+.orb{
+animation: floatSlow 10s ease-in-out infinite;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<form method="POST" class="glass relative z-10 w-full max-w-md rounded-3xl p-8">
+<h1 class="text-4xl font-extrabold text-gray-900 mb-2">
+Study Zen
+</h1>
+<p class="text-gray-600 mb-8">
+Create your calm productivity space.
+</p>
+<input 
+name="username"
+placeholder="Username"
+class="w-full p-4 rounded-2xl bg-white/60 border border-white/40 mb-4 outline-none">
+<input
+name="email"
+placeholder="Email"
+class="w-full p-4 rounded-2xl bg-white/60 border border-white/40 mb-4 outline-none">
+<input
+name="password"
+type="password"
+placeholder="Password"
+class="w-full p-4 rounded-2xl bg-white/60 border border-white/40 mb-5 outline-none">
+<button
+type="submit"
+class="w-full py-4 rounded-2xl bg-emerald-700 text-white font-semibold hover:scale-[1.01] transition">
+Create Account
 </button>
-<a href="/login" class="block mt-4 text-sm text-blue-500">
+<a href="/login"
+class="block mt-5 text-sm font-semibold text-gray-900">
 Back to login
 </a>
-</from>
-</body>
-</html>
+</form>
+{% endblock %}
