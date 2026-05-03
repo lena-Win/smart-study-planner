@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import os
+from datetime import date, timedelta
 print("APP FILE STARTED")
 app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -69,12 +70,52 @@ def home():
     high_priority_count = sum(
         1 for s in subjects if s ["priority"] == "HIGH"
     )
+    today = date.today()
+    streak = 0
+    conn = get_connection()
+    user = conn.execute(
+        "SELECT last_active, streak FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+    if not user:
+        conn.close()
+        return redirect("/login")
+    if user:
+        last_active = user["last_active"] if user["last_active"] else None
+        streak = user["streak"] or 0
+        if last_active:
+            last_active_date = date.fromisoformat(last_active)
+            if last_active_date == today:
+                pass
+            elif last_active_date == today - timedelta(days=1):
+                streak += 1
+            else:
+                streak = 1 
+        else:
+            streak = 1
+        conn.execute(
+            "UPDATE users SET last_active = ?, streak = ? WHERE id = ?",
+            (today.isoformat(), streak, session["user_id"])
+        )
+        conn.commit()
+    conn.close()
+        
+    mood = request.args.get("mood", "Calm")
+    quotes = {
+        "Focused": "Clarity creates momentum.",
+        "Calm": "Move gently, but keep moving.",
+        "Tired": "Small steps still count.",
+        "Motivated": "Your future is built today."
+    }
     return render_template(
         "index.html", 
         plan=sorted_subjects,
         total_subjects=total_subjects,
         total_pages_today=total_pages_today,
-        high_priority_count=high_priority_count
+        high_priority_count=high_priority_count,
+        mood=mood,
+        quote=quotes.get(mood, "Move gently, but keep moving."),
+        streak=streak
     )
 @app.route("/delete/<int:item_id>")
 def delete(item_id):
@@ -123,6 +164,7 @@ def register():
     if "user_id" in session:
         return redirect("/")
     if request.method == "POST":
+        print("FROM DATA:", request.form)
         username = request.form["username"]
         password = request.form["password"]
         email = request.form["email"]
@@ -136,9 +178,9 @@ def register():
             conn.commit()
             conn.close()
             return redirect("/login")
-        except:
-            conn.close()
-            return "User already exists"
+        except Exception as e:
+            print("ERROR:", e)
+            return "Registeration error"
     return render_template("register.html")
 @app.route("/login", methods=["GET", "POST"])
 def login():

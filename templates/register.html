@@ -42,7 +42,8 @@ animation: floatSlow 10s ease-in-out infinite;
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
-<form method="POST" class="glass relative z-10 w-full max-w-md rounded-3xl p-8">
+<form method="POST" action="/register"
+class="glass relative z-10 w-full max-w-md rounded-3xl p-8">
 <h1 class="text-4xl font-extrabold text-gray-900 mb-2">
 Study Zen
 </h1>
@@ -64,6 +65,7 @@ placeholder="Password"
 class="w-full p-4 rounded-2xl bg-white/60 border border-white/40 mb-5 outline-none">
 <button
 type="submit"
+formmethod="post"
 class="w-full py-4 rounded-2xl bg-emerald-700 text-white font-semibold hover:scale-[1.01] transition">
 Create Account
 </button>
