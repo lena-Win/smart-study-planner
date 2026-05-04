@@ -48,6 +48,31 @@ def home():
             conn.commit()
             conn.close()
             track_event("add_subject")
+            today = date.today()
+            conn = get_connection()
+            user = conn.execute(
+                "SELECT last_active, streak FROM users WHERE id = ?",
+                (session["user_id"],)
+            ).fetchone()
+            if user:
+                last_active = user["last_active"]
+                streak = user["streak"] if user["streak"] else 0
+                if last_active:
+                    last_active_date = date.fromisoformat(last_active)
+                    if last_active_date == today:
+                        pass
+                    elif last_active_date == today - timedelta(days=1):
+                        streak += 1
+                    else:
+                        streak = 1
+                else:
+                    streak = 1
+            conn.execute(
+                "UPDATE users SET last_active = ?, streak = ? WHERE id = ?",
+                (today.isoformat(), streak, session["user_id"])
+            )
+            conn.commit()
+            conn.close()
             return redirect(url_for("home"))
     conn = get_connection()
     subjects = conn.execute(
@@ -70,36 +95,7 @@ def home():
     high_priority_count = sum(
         1 for s in subjects if s ["priority"] == "HIGH"
     )
-    today = date.today()
-    streak = 0
-    conn = get_connection()
-    user = conn.execute(
-        "SELECT last_active, streak FROM users WHERE id = ?",
-        (session["user_id"],)
-    ).fetchone()
-    if not user:
-        conn.close()
-        return redirect("/login")
-    if user:
-        last_active = user["last_active"] if user["last_active"] else None
-        streak = user["streak"] or 0
-        if last_active:
-            last_active_date = date.fromisoformat(last_active)
-            if last_active_date == today:
-                pass
-            elif last_active_date == today - timedelta(days=1):
-                streak += 1
-            else:
-                streak = 1 
-        else:
-            streak = 1
-        conn.execute(
-            "UPDATE users SET last_active = ?, streak = ? WHERE id = ?",
-            (today.isoformat(), streak, session["user_id"])
-        )
-        conn.commit()
-    conn.close()
-        
+    
     mood = request.args.get("mood", "Calm")
     quotes = {
         "Focused": "Clarity creates momentum.",
@@ -107,6 +103,15 @@ def home():
         "Tired": "Small steps still count.",
         "Motivated": "Your future is built today."
     }
+    streak = 0
+    conn = get_connection()
+    user = conn.execute(
+        "SELECT streak FROM users WHERE id = ?",
+        (session["user_id"],)
+    ).fetchone()
+    if user and user["streak"]:
+        streak = user["streak"]
+    conn.close()
     return render_template(
         "index.html", 
         plan=sorted_subjects,

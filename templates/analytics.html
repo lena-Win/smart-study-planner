@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 .orb{
 position:absolute;
@@ -76,5 +77,27 @@ Back Home
 <p class="text-5xl font-bold mt-2">{{ downloads }}</p>
 </div>
 </div>
+<!--CHART-->
+<div class="glass rounded-3xl p-6 mt-8">
+<canvas id="analyticsChart"></canvas>
 </div>
+</div>
+<script>
+const chartData = JSON.parse('{{ [visits, adds, deletes, downloads] | tojson | safe }}');
+const ctx = document.getElementById('analyticsChart');
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['Visits', 'Adds', 'Deletes', 'Downloads'],
+datasets: [{
+label: 'User Activity',
+data: chartData,
+borderWidth: 1
+}]
+},
+options: {
+responsive: true
+}
+});
+</script>
 {% endblock %}
