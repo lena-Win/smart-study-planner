@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+.orb{
+position:absolute;
+border-radius:9999px;
+filter: blur(80px);
+opacity:.45;
+animation: floatSlow 12s ease-in-out infinite;
+z-index:0;
+}
+.orb1{width:320px;height:320px;background:#b7dbff;top:-60px;left:-60px;}
+.orb2{width:300px;height:300px;background:#c7f0d3;right:-60px;bottom:-60px;}
+.orb3{width:240px;height:240px;background:#eadcff;top:40%;left:40%;}
+
+@keyframes floatSlow {
+0% { transform: translateY(0px); }
+50% { transform: translateY(-30px); }
+100% { transform: translateY(0px); }
+}
+</style>
+{% endblock %}
+{% block content %}
+<!-- ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="relative z-10 max-w-6xl mx-auto py-20 mb:py-28">
+<!-- NAV -->
+<div class="nav-glass sticky top-4 z-20 rounded-full px-6 py-3 flex justify-between items-center mb-16">
+<h1 class="text-lg font-extrabold text-gray-900">
+Study Zen
+</h1>
+<div class="flex gap-3">
+<a href="/login">
+<button class="px-5 py-2 rounded-full bg-white/70 hover:bg-white transition">
+Login
+</button>
+</a>
+<a href="/register">
+<button class="px-5 py-2 rounded-full bg-gray-900 text-white glow-button">
+Get Started
+</button>
+</a>
+</div>
+</div>
+<!-- HERO -->
+<div class="text-center mb-20">
+<h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+<span class="glow-text">Study with clarity</span><br>
+without chaos
+</h2>
+<p class="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
+Study Zen helps you plan, focus, and stay consistent — without stress or chaos.
+</p>
+<div class="flex justify-center gap-4 flex-wrap">
+<a href="/register">
+<button class="px-8 py-4 rounded-full bg-gray-900 text-white glow-button hover:scale-[1.03] transition">
+Start your flow
+</button>
+</a>
+<a href="/login">
+<button class="px-8 py-4 rounded-full bg-white/70 hover:bg-white transition">
+I already have an account
+</button>
+</a>
+</div>
+</div>
+<!-- DASHBOARD PREVIEW -->
+<div class="mt-16 mb-24">
+<div class="glass rounded-3xl p-6 md:p-10 relative overflow-hidden">
+<!-- HEADER MOCK -->
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="text-xl font-bold text-gray-900">Your Study Dashboard</h3>
+<p class="text-gray-500 text-sm">Preview of your personalized flow</p>
+</div>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-red-300"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-300"></div>
+<div class="w-3 h-3 rounded-full bg-green-300"></div>
+</div>
+</div>
+<!-- GRID MOCK -->
+<div class="grid md:grid-cols-3 gap-4">
+<div class="glass rounded-2xl p-4">
+<p class="text-sm text-gray-500">Subjects</p>
+<p class="text-3xl font-bold">6</p>
+</div>
+<div class="glass rounded-2xl p-4">
+<p class="glass rounded-2xl p-4">
+<p class="text-sm text-gray-500">Pages Today</p>
+<p class="text-3xl font-bold">42</p>
+</div>
+<div class="glass rounded-2xl p-4">
+<p class="glass rounded-2xl p-4">
+<p class="text-sm text-gray-500">Streak</p>
+<p class="text-3xl font-bold text-emerald-700">7 days</p>
+</div>
+</div>
+<!--FAKE LIST-->
+<div class="mt-6 space-y-3">
+<div class="flex justify-between glass rounded-2xl p-4">
+<span class="font-medium">Mathematics</span>
+<span class="text-rose-600 font-semibold">HIGH</span>
+</div>
+<div class="flex justify-between glass rounded-2xl p-4">
+<span class="font-medium">Biology</span>
+<span class="text-amber-600 font-semibold">MEDIUM</span>
+</div>
+<div class="flex justify-between glass rounded-2xl p-4">
+<span class="font-medium">History</span>
+<span class="text-emerald-600 font-semibold">LOW</span>
+</div>
+</div>
+<!--FAKE GLOW-->
+<div class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-200 rounded-full blur-3xl opacity-40"></div>
+</div>
+</div>
+<!-- FEATURES -->
+<div class="grid md:grid-cols-3 gap-6">
+<div class="glass rounded-3xl p-6">
+<h3 class="text-xl font-bold mb-2">Smart Planning</h3>
+<p class="text-gray-600">
+Automatically generate your daily study plan based on time and priority.
+</p>
+</div>
+<div class="glass rounded-3xl p-6">
+<h3 class="text-xl font-bold mb-2">Focus Mode</h3>
+<p class="text-gray-600">
+Stay in deep work with a built-in focus timer and distraction-free design.
+</p>
+</div>
+<div class="glass rounded-3xl p-6">
+<h3 class="text-xl font-bold mb-2">Progress Tracking</h3>
+<p class="text-gray-600">
+Track your streaks and build consistent study habits.
+</p>
+</div>
+</div>
+<!--How It Works-->
+<div class="mt-24 grid md:grid-cols-3 gap-6 text-center">
+<div>
+<div class="text-4xl mb-3">1</div>
+<h3 class="font-bold text-lg">Plan</h3>
+<p class="text-gray-600 text-sm">
+Add subjects and define your timeline.
+</p>
+</div>
+<div>
+<div class="text-4xl mb-3">2</div>
+<h3 class="font-bold text-lg">Focus</h3>
+<p class="text-gray-600 text-sm">
+Enter deep work with Focus Mode.
+</p>
+</div>
+<div>
+<div class="text-4xl mb-3">3</div>
+<h3 class="font-bold text-lg">Grow</h3>
+<p class="text-gray-600 text-sm">
+Track streaks and stay consistent.
+</p>
+</div>
+</div>
+<!-- SOCIAL PROOF / VIBE -->
+<div class="mt-20 text-center">
+<p class="text-gray-500 italic">
+Designed for clarity. Built for consistency.
+</p>
+</div>
+</div>
+{% endblock %}

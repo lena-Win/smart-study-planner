@@ -6,7 +6,7 @@ def export_plan_to_pdf(plan):
     c = canvas.Canvas(filename, pagesize=letter)
     y = 750
     for item in plan:
-        line = f"{item["subject"]} - {item["pages_today"]} pages ({item["priority"]})"
+        line = f"{item['subject']} - {item['pages_today']} pages ({item['priority']})"
         c.drawString(100, y, line)
         y -= 25
     c.save()  

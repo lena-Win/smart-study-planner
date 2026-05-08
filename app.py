@@ -8,15 +8,15 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import os
 from datetime import date, timedelta
-print("APP FILE STARTED")
 app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_TIMEOUT"] = 10
 app.config["MAIL_USERNAME"] = "smartstudyplanner777@gmail.com"
 app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 mail = Mail(app)
-app.secret_key = "supersecretkey444"
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 serializer = URLSafeTimedSerializer(app.secret_key)
 init_db()
 @app.route("/", methods=["GET", "POST"])
@@ -208,24 +208,29 @@ def login():
 def logout():
     session.clear()
     return redirect("/login")
+@app.route("/users")
+def users():
+    conn = get_connection()
+    users = conn.execute("SELECT * FROM users").fetchall()
+    conn.close()
+    return str([dict(u) for u in users])
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     if request.method == "POST":
         email = request.form["email"]
-        print("EMAIL:", email)
         conn = get_connection()
         user = conn.execute(
             "SELECT * FROM users WHERE email = ?",
             (email,)
         ).fetchone()
         conn.close()
-        print("USER", user)
         if user:
             token = serializer.dumps(email, salt="reset-password")
-            link = url_for("reset_token", token=token, _external=True)
-            print("RESET LINK:", link)
-            print("MAIL USERNAME:", app.config["MAIL_USERNAME"])
-            print("MAIL PASSWORD EXISTS:", bool(app.config["MAIL_PASSWORD"]))
+            link = url_for(
+                "reset_token", 
+                token=token,
+                _external=True
+            )
             msg = Message(
                 "Password Reset",
                 sender=app.config["MAIL_USERNAME"],
@@ -234,9 +239,8 @@ def forgot_password():
             msg.body = f"Click this link to reset password:\n{link}"
             try:
                 mail.send(msg)
-                print("EMAIL SENT SUCCESSFULLY")
             except Exception as e:
-                print("EMAIL ERROR:", e)
+                print(e)
         return "If email exists, reset link sent."
     return render_template("forgot_password.html")
 @app.route("/reset/<token>", methods=["GET", "POST"])

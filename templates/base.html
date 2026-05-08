@@ -23,6 +23,35 @@ box-shadow:
 0 8px 32px rgba(0,0,0,0.08),
 inset 0 1px 0 rgba(255,255,255,0.6);
 }
+.glow-text{
+background: linear-gradient(90deg,#7dd3fc,#86efac,#c4b5fd);
+background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+-webkit-text-fill-color: transparent;
+}
+.glow-button{
+position: relative;
+overflow: hidden;
+}
+.glow-button::after{
+content: "";
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(120deg,transparent,rgba(255,255,255,0.6),transparent);
+transition: all .6s;
+}
+.glow-button:hover::after{
+left: 100%;
+}
+.nav-glass{
+background: rgba(255,255,255,0.35);
+backdrop-filter: blur(20px);
+border: 1px solid rgba(255,255,255,0.25);
+}
 </style>
 {% block extra_head %}{% endblock %}
 </head>
