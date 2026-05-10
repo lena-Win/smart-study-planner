@@ -6,8 +6,10 @@ from database import init_db, get_connection, track_event
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-import os
 from datetime import date, timedelta
+import os
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
@@ -19,10 +21,16 @@ mail = Mail(app)
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 serializer = URLSafeTimedSerializer(app.secret_key)
 init_db()
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def root():
+    return render_template("landing.html")
+@app.route("/landing")
+def landing():
+    return render_template("landing.html")
+@app.route("/dashboard", methods=["GET", "POST"])
 def home():
     if "user_id" not in session:
-        return redirect("/login")
+        return redirect("/landing")
     track_event("page_visit")
     if request.method == "POST":
         subject = request.form.get("subject")
@@ -129,7 +137,7 @@ def delete(item_id):
     conn.commit()
     conn.close()
     track_event("delete_subject")
-    return redirect("/")
+    return redirect("/dashboard")
 @app.route("/download")
 def download():
     conn = get_connection()
@@ -143,6 +151,8 @@ def download():
     return send_file(pdf_file, as_attachment=True)
 @app.route("/analytics")
 def analytics():
+    if "user_id" not in session:
+        return redirect("/")
     conn = get_connection()
     total_visits = conn.execute(
         "SELECT COUNT(*) FROM analytics WHERE event = 'page_visit'"
@@ -167,7 +177,7 @@ def analytics():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if "user_id" in session:
-        return redirect("/")
+        return redirect("/dashboard")
     if request.method == "POST":
         print("FROM DATA:", request.form)
         username = request.form["username"]
@@ -201,13 +211,13 @@ def login():
         if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
             session["username"] = user["username"]
-            return redirect("/")
+            return redirect("/dashboard")
         return "Invalid login"
     return render_template("login.html")
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/login")
+    return redirect("/")
 @app.route("/users")
 def users():
     conn = get_connection()
