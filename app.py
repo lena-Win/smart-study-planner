@@ -7,8 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from datetime import date, timedelta
-import os
 from dotenv import load_dotenv
+import os
 load_dotenv()
 app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
@@ -17,6 +17,7 @@ app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_TIMEOUT"] = 10
 app.config["MAIL_USERNAME"] = "smartstudyplanner777@gmail.com"
 app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+print("MAIL PASSWORD:", os.getenv("MAIL_PASSWORD"))
 mail = Mail(app)
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
 serializer = URLSafeTimedSerializer(app.secret_key)
