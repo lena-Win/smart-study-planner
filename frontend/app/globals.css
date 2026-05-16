@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+
+  --matcha: #A7C08B;
+  --sage: #D8E2C4;
+  --beige: #F3EDDF;
+  --cream: #FFFAF3;
+  --blush: #F7C8D0;
+  --brown: #B99E8C;
+
+  --night: #101726;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+
+  margin: 0;
+
+  background:
+  radial-gradient(circle at top left, #f6efe6 0%, transparent 25%),
+  radial-gradient(circle at top right, #dfead4 0%, transparent 30%),
+  radial-gradient(circle at bottom right, #f6d9df 0% transparent 25%),
+#f8f3eb;
+  min-height: 100vh;
+
+  color: #2a2a2a;
+
+  font-family: 'Inter', sans-serif;
+
+  overflow-x: hidden;
+}
+
+h1,h2,h3,h4 {
+  font-family: 'Playfair Display', serif;
+}
+
+.glass {
+
+  background: rgba(255,255,255,0.35);
+
+  backdrop-filter: blur(30px);
+
+  -webkit-backdrop-filter: blur(30px);
+
+  border: 1px solid rgba(255,255,255,0.45);
+
+  box-shadow:
+    0 10px 40px rgba(181,161,130,0.10),
+    inset 0 1px 1px rgba(255,255,255,0.65);
+
+}
+
+.soft-shadow {
+  box-shadow:
+    0 20px 60px rgba(185,158,140,0.18);
+}
+
+@keyframes shimmer {
+
+  0% {
+    transform: translateX(-150%);
+  }
+
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 8s linear infinite;
+}
+/* FLOATING */
+
+@keyframes floatSlow {
+
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float-slow {
+  animation: floatSlow 7s ease-in-out infinite;
+}
+
+/* WATER DROPLET */
+
+@keyframes droplet {
+
+  0% {
+    transform: translateY(0px);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 0.5;
+  }
+}
+
+.droplet {
+  animation: droplet 5s ease-in-out infinite;
+}
+
+/* GLOW */
+
+.soft-glow {
+  box-shadow:
+    0 0 80px rgba(255,255,255,0.4);
+}
+/* APP CONTAINER */
+
+.app-container {
+
+  width: 100%;
+  max-width: 1780px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+/* SECTION SPACING */
+
+.section-spacing {
+  margin-top: 140px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1024px) {
+
+  .app-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .app-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+}
+/* =========================
+   GLASS SHIMMER
+========================= */
+
+@keyframes glassShimmer {
+
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.glass-shimmer {
+
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shimmer::after {
+
+  content: "";
+
+  position: absolute;
+  top: -20%;
+  left: -120%;
+
+  width: 40%;
+  height: 140%;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,0.35),
+      transparent
+    );
+
+  animation: glassShimmer 8s ease-in-out infinite;
+}
+
+/* =========================
+   PREMIUM HOVER
+========================= */
+
+.premium-hover {
+
+  transition:
+    transform 0.5s ease,
+    box-shadow 0.5s ease,
+    background 0.5s ease;
+}
+
+.premium-hover:hover {
+
+  transform:
+    translateY(-6px)
+    scale(1.01);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   BREATHING GLOW
+========================= */
+
+@keyframes breatheGlow {
+
+  0% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.75;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+}
+
+.breathe-glow {
+  animation: breatheGlow 7s ease-in-out infinite;
+}
+/* =========================
+   DARK MODE
+========================= */
+
+.dark body {
+
+  background:
+    radial-gradient(circle at top left, #1e2328 0%, transparent 30%),
+    radial-gradient(circle at bottom right, #23263a 0%, transparent 30%),
+    #111315;
+
+  color: white;
+}
+
+/* GLASS */
+
+.dark .glass {
+
+  background: rgba(30,30,35,0.45);
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+/* TEXT */
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark p,
+.dark span {
+
+  color: #f5f1ea !important;
+}
+/* =========================
+   LIQUID GLASS
+========================= */
+
+@keyframes liquidMove {
+
+  0% {
+    transform: translateX(-10px) translateY(0px);
+  }
+
+  50% {
+    transform: translateX(10px) translateY(-8px);
+  }
+
+  100% {
+    transform: translateX(-10px) translateY(0px);
+  }
+}
+
+@keyframes chromeShine {
+
+  0% {
+    transform: translateX(-120%) skewX(-20deg);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes dropletFloat {
+
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* =========================
+   LIQUID CARD
+========================= */
+
+.liquid-glass {
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.28),
+      rgba(255,255,255,0.12)
+    );
+
+  backdrop-filter: blur(28px);
+
+  border:
+    1px solid rgba(255,255,255,0.22);
+}
+
+/* MOVING LIQUID */
+
+.liquid-glass::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: -40%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,0.16),
+      transparent 60%
+    );
+
+  animation:
+    liquidMove 10s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+/* CHROME SHINE */
+
+.liquid-glass::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: -30%;
+  left: -120%;
+
+  width: 40%;
+  height: 160%;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,0.35),
+      transparent
+    );
+
+  animation:
+    chromeShine 9s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+/* FLOAT */
+
+.droplet-float {
+
+  animation:
+    dropletFloat 5s ease-in-out infinite;
+}
