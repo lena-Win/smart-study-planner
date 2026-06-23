@@ -31,7 +31,7 @@ export default function Hero() {
           text-[#7c8b68]
           mb-6
         ">
-          Calm productivity platform
+          Mindful study companion
         </p>
 
         <h1 className="
@@ -40,8 +40,8 @@ export default function Hero() {
           leading-[0.95]
           text-[#2d2d2d]
         ">
-          Study with clarity,
-          live with intention.
+          Study softly,
+          grow naturally
         </h1>
 
         <p className="
@@ -51,8 +51,7 @@ export default function Hero() {
           text-[#6f6a63]
           max-w-xl
         ">
-          A calm space to plan, focus and grow —
-          without pressure or chaos.
+          A gentle productivity space inspired by nature, wellness and intentional living.
         </p>
         <div className="
         liquid-glass
@@ -142,19 +141,21 @@ export default function Hero() {
           z-10
         " />
           <img
-            src="https://images.unsplash.com/photo-1511300636408-a63a89df3482?q=80&w=1400&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80"
             className="
-              absolute
-              inset-0
-              w-full
-              h-full
-              object-cover
-              scale-[1.02]
-              hover:scale-[1.05]
-              transition-all
-              duration-[4000ms]
-              ease-out
-            "/>
+            absolute
+            inset-0
+            w-full
+            h-full
+            object-cover
+            scale-[1.02]
+            hover:scale-[1.05]
+            transition-all
+            duration-[4000ms]
+            ease-out
+            "
+          />
+          
         {/* FLOATING GLASS */}
 
         <div className="
@@ -178,7 +179,7 @@ export default function Hero() {
             text-white/70
             mb-3
           ">
-            Focus Atmosphere
+            Mindful Companion
           </p>
 
           <h3 className="
@@ -186,14 +187,14 @@ export default function Hero() {
             text-white
             mb-2
           ">
-            Rain Session
+           Otter Focus
           </h3>
 
           <p className="
             text-white/80
             leading-relaxed
           ">
-            Gentle rain ambience with softened interface motion for deep focus.
+            A calm study companion helping you stay focused without pressure.
           </p>
         </div>
           <div className="

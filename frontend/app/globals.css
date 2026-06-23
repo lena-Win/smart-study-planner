@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 :root {
 
   --matcha: #A7C08B;
@@ -31,7 +28,7 @@ body {
   background:
   radial-gradient(circle at top left, #f6efe6 0%, transparent 25%),
   radial-gradient(circle at top right, #dfead4 0%, transparent 30%),
-  radial-gradient(circle at bottom right, #f6d9df 0% transparent 25%),
+  radial-gradient(circle at bottom right, #f6d9df 0%, transparent 25%),
 #f8f3eb;
   min-height: 100vh;
 
