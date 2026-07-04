@@ -1,371 +1,207 @@
-"use client"
-import { useEffect, useState } from "react"
-import {
-  CircularProgressbar,
-  buildStyles
-} from "react-circular-progressbar"
-import "react-circular-progressbar/dist/styles.css"
-import Sidebar from "../../components/layout/Sidebar"
-import { motion } from "framer-motion"
-
 export default function FocusPage() {
-const SESSION_TIME = 25 * 60
-
-const [timeLeft, setTimeLeft] = useState(SESSION_TIME)
-
-const [isRunning, setIsRunning] = useState(false)
-useEffect(() => {
-
-  let interval: NodeJS.Timeout
-
-  if (isRunning && timeLeft > 0) {
-
-    interval = setInterval(() => {
-
-      setTimeLeft(prev => prev - 1)
-
-    }, 1000)
-
-  }
-
-  return () => clearInterval(interval)
-
-}, [isRunning, timeLeft])
-const minutes = Math.floor(timeLeft / 60)
-
-const seconds = timeLeft % 60
-
-const percentage =
-  ((SESSION_TIME - timeLeft) / SESSION_TIME) * 100
-
   return (
+    <main className="app-container section-spacing">
 
-    <main className="
-      min-h-screen
-      flex
-      overflow-hidden
-      relative
+      {/* HEADER */}
 
-      bg-gradient-to-br
-      from-[#dce6f2]
-      via-[#eef3f7]
-      to-[#d9e3ef]
-    ">
+      <div className="mb-12">
 
-      {/* RAIN LIGHT */}
-
-      <div className="
-        absolute
-        inset-0
-        opacity-20
+      <p className="
+        uppercase
+        tracking-[0.35em]
+        text-sm
+      text-[#8b977c]
+        mb-4
       ">
+        YOUR SACRED SPACE
+      </p>
 
-        <div className="
-          absolute
-          left-[10%]
-          top-0
-          h-full
-          w-[1px]
-          bg-white/70
-          animate-pulse
-        " />
-
-        <div className="
-          absolute
-          left-[30%]
-          top-0
-          h-full
-          w-[1px]
-          bg-white/60
-          animate-pulse
-        " />
-
-        <div className="
-          absolute
-          left-[55%]
-          top-0
-          h-full
-          w-[1px]
-          bg-white/50
-          animate-pulse
-        " />
-
-        <div className="
-          absolute
-          left-[75%]
-          top-0
-          h-full
-          w-[1px]
-          bg-white/60
-          animate-pulse
-        " />
-
+      <h1 className="
+        text-7xl
+      text-[#2d2d2d]
+      ">
+        Focus Sanctuary
+      </h1>
+       
       </div>
 
-      {/* WATER GLOW */}
+      {/* MAIN GRID */}
 
       <div className="
-        absolute
-        top-[-100px]
-        right-[-100px]
-
-        w-[500px]
-        h-[500px]
-
-        rounded-full
-
-        bg-white/30
-
-        blur-[140px]
-
-        breathe-glow
-      " />
-
-      <Sidebar />
-
-      {/* CONTENT */}
-
-      <div className="
-        flex-1
-        relative
-        z-10
-
-        flex
-        items-center
-        justify-center
-
-        p-10
+        grid
+        lg:grid-cols-[1.3fr_0.8fr]
+        gap-8
       ">
 
-        <motion.div
+        {/* TIMER */}
 
-          initial={{
-            opacity: 0,
-            scale: 0.95
-          }}
+        <div className="
+          liquid-glass
+          rounded-[40px]
+          p-10
+          min-h-[520px]
+          flex
+          flex-col
+          justify-center
+          items-center
+          text-center
+        ">
 
-          animate={{
-            opacity: 1,
-            scale: 1
-          }}
+          <p className="
+            uppercase
+            tracking-[0.3em]
+            text-sm
+            text-[#7c8b68]
+            mb-6
+          ">
+            Pomodoro
+          </p>
 
-          transition={{
-            duration: 1
-          }}
-
-          className="
-            liquid-glass
-            glass-shimmer
-
-            rounded-[60px]
-
-            w-full
-            max-w-[1000px]
-
-            p-14
-
-            relative
-            overflow-hidden
-          "
-        >
-
-          {/* INTERNAL GLOW */}
-
-          <div className="
-            absolute
-            inset-0
-
-            bg-gradient-to-br
-            from-white/20
-            via-transparent
-            to-[#d9e3ef]/30
-
-            pointer-events-none
-          " />
+          <h2 className="
+            text-[120px]
+            leading-none
+            mb-8
+          ">
+            25:00
+          </h2>
+        <p className="
+          mt-5
+          uppercase
+          tracking-[0.25em]
+          text-sm
+        text-[#7f8a70]
+        ">
+          Deep focus with gentle energy
+        </p>
 
           <div className="
-            relative
-            z-10
+            flex
+            gap-4
           ">
 
-            {/* TOP */}
-
-            <div className="
-              flex
-              justify-between
-              items-center
-              mb-14
+            <button className="
+              px-8
+              py-4
+              rounded-full
+              bg-[#9eb58a]
+              text-white
             ">
+              Begin Session
+            </button>
 
-              <div>
-
-                <p className="
-                  uppercase
-                  tracking-[0.3em]
-                  text-sm
-                  text-[#748392]
-                  mb-4
-                ">
-                  Focus Atmosphere
-                </p>
-
-                <h1 className="
-                  text-6xl
-                  text-[#2d3742]
-                ">
-                  Rain Session
-                </h1>
-
-              </div>
-
-              <div className="
-                liquid-glass
-                rounded-full
-                px-6
-                py-4
-              ">
-                🌧 Deep Focus
-              </div>
-
-            </div>
-
-            {/* CENTER */}
-
-            <div className="
-              flex
-              flex-col
-              items-center
-              justify-center
+            <button className="
+              px-8
+              py-4
+              rounded-full
+              glass
             ">
-
-              {/* ANIMAL */}
-
-              <motion.div
-
-                animate={{
-                  y: [0, -10, 0]
-                }}
-
-                transition={{
-                  duration: 5,
-                  repeat: Infinity
-                }}
-
-                className="
-                  text-[120px]
-                  mb-10
-                "
-              >
-                🦭
-              </motion.div>
-
-              {/* TIMER */}
-
-              <div className="
-                relative
-                mb-10
-              ">
-
-                {/* GLOW */}
-
-                <div className="
-                  absolute
-                  inset-0
-
-                  rounded-full
-
-                  bg-white/40
-
-                  blur-[80px]
-
-                  scale-125
-
-                  breathe-glow
-                " />
-
-                <div className="
-                  relative
-                  z-10
-                  w-[320px]
-                  h-[320px]
-                ">
-                    <CircularProgressbar
-                    value={percentage}
-                    strokeWidth={2}
-                    styles={buildStyles({
-                        pathColor: "rgba(255,255,255,0.9)",
-                        trailColor: "rgba(255,255,255,0.12)",
-                        strokeLinecap: "round"
-                    })}
-                />
-                <div className="
-                    absolute
-                    inset-0
-                    flex
-                    items-center
-                    justify-center
-                ">
-                <div className="
-                    text-7xl
-                    text-[#31404d]
-                ">
-
-                    {String(minutes).padStart(2, "0")}:
-                    {String(seconds).padStart(2, "0")}
-
-                </div>
-            </div>
-        </div>
-        </div>
-              {/* BUTTONS */}
-
-              <div className="
-                flex
-                gap-5
-              ">
-
-                <button 
-                    onClick={() => setIsRunning(!isRunning)}
-                    className="
-                        px-8
-                        py-4
-                        rounded-full
-                        bg-white/50
-                        hover:scale-[1.04]
-                        transition-all
-                        text-[#2f3942]
-                    "
-                >
-
-                    {isRunning ? "Pause Session" : "Start Session"}
-                </button>
-                <button
-                    onClick={() => {
-                        setIsRunning(false)
-                        setTimeLeft(SESSION_TIME)
-                    }}
-                    className="
-                        px-8
-                        py-4
-                        rounded-full
-                        bg-[#e8ddd2]
-                        hover:scale-[1.04]
-                        transition-all
-                        text-[#4e433c]
-                    "
-                >
-                    Reset
-                </button>
-
-              </div>
-
-            </div>
+              Breathing Mode
+            </button>
 
           </div>
 
-        </motion.div>
+        </div>
+
+        {/* SIDE PANEL */}
+
+        <div className="
+          flex
+          flex-col
+          gap-6
+        ">
+
+        {/* SWAN */}
+
+        <div className="
+          liquid-glass
+          rounded-[34px]
+          p-8
+          premium-hover
+        ">
+
+        <h3 className="
+          text-4xl
+          mb-3
+        ">
+          🦢 Swan Lake
+        </h3>
+
+        <p className="text-[#6d675f]">
+          Soft focus, clarity and graceful flow.
+        </p>
 
       </div>
+
+      {/* FOREST */}
+
+      <div className="
+        liquid-glass
+        rounded-[34px]
+        p-8
+        premium-hover
+      ">
+
+        <h3 className="
+          text-4xl
+          mb-3
+        ">
+          🦌 Forest Sanctuary
+        </h3>
+
+        <p className="text-[#6d675f]">
+          Grounding energy and nervous system calm.
+        </p>
+
+      </div>
+
+      {/* DREAM */}
+
+      <div className="
+        liquid-glass
+        rounded-[34px]
+        p-8
+        premium-hover
+      ">
+
+        <h3 className="
+          text-4xl
+          mb-3
+        ">
+          🦋 Dream Garden
+        </h3>
+
+        <p className="text-[#6d675f]">
+          Creativity, journaling and gentle reflection.
+        </p>
+
+      </div>
+
+      {/* COZY */}
+
+      <div className="
+        liquid-glass
+        rounded-[34px]
+        p-8
+        premium-hover
+      ">
+
+        <h3 className="
+          text-4xl
+          mb-3
+        ">
+          🐈 Cozy Focus
+        </h3>
+
+        <p className="text-[#6d675f]">
+          Deep work with warm ambience and comfort.
+        </p>
+
+      </div>
+
+    </div>
+
+          
+        </div>
 
     </main>
   )

@@ -1,218 +1,182 @@
-import Sidebar from "../../components/layout/Sidebar"
 export default function PlannerPage() {
   return (
+    <main className="app-container section-spacing">
 
-    <main className="
-      min-h-screen
-      flex
-      bg-[#f8f3eb]
-    ">
+      {/* HEADER */}
 
-      <Sidebar />
+      <div className="mb-12">
 
-      <div className="
-        flex-1
-        p-10
-      ">
+        <p
+          className="
+            uppercase
+            tracking-[0.3em]
+            text-sm
+            text-[#7c8b68]
+            mb-4
+          "
+        >
+          Intentional planning
+        </p>
 
-        <div className="
-          max-w-[1600px]
-          mx-auto
-        ">
+        <h1
+          className="
+            text-6xl
+            text-[#2d2d2d]
+            mb-4
+          "
+        >
+          📅 Planner
+        </h1>
 
-          {/* HEADER */}
+        <p
+          className="
+            text-lg
+            text-[#6f6a63]
+            max-w-2xl
+          "
+        >
+          Organize your day with calm structure.
+        </p>
 
-          <div className="
-            liquid-glass
-            rounded-[40px]
-            p-10
-            mb-8
-          ">
+      </div>
 
-            <p className="
-              uppercase
-              tracking-[0.3em]
-              text-sm
-              text-[#7e8b76]
-              mb-4
-            ">
-              Planner Space
-            </p>
+      {/* TOP GRID */}
 
-            <h1 className="
-              text-6xl
-              text-[#2f2f2f]
-              mb-4
-            ">
-              Gentle Planning
-            </h1>
+      <div
+        className="
+          grid
+          lg:grid-cols-3
+          gap-6
+          mb-8
+        "
+      >
 
-            <p className="
-              text-[#6a6a6a]
-              text-lg
-              max-w-[700px]
-              leading-relaxed
-            ">
-              Organize your energy with clarity,
-              softness, and nervous-system friendly structure.
-            </p>
+        {/* TODAY */}
 
+        <div className="liquid-glass rounded-[36px] p-8">
+
+          <div className="text-5xl mb-5">
+            🌿
           </div>
 
-          {/* GRID */}
+          <h3 className="text-2xl mb-3">
+            Today's Focus
+          </h3>
 
-          <div className="
-            grid
-            lg:grid-cols-3
-            gap-8
-          ">
+          <p className="text-[#6d675f]">
+            Complete your most important task first.
+          </p>
 
-            {/* TASKS */}
+        </div>
 
-            <div className="
-              liquid-glass
-              rounded-[40px]
-              p-8
-              lg:col-span-2
-            ">
+        {/* ENERGY */}
 
-              <div className="
-                flex
-                justify-between
-                items-center
-                mb-8
-              ">
+        <div className="liquid-glass rounded-[36px] p-8">
 
-                <h2 className="
-                  text-3xl
-                ">
-                  Today’s Flow
-                </h2>
+          <div className="text-5xl mb-5">
+            ☀️
+          </div>
 
-                <button className="
-                  px-5
-                  py-3
-                  rounded-full
-                  bg-[#dce9d0]
-                  hover:scale-[1.03]
-                  transition-all
-                ">
-                  + Add Task
-                </button>
+          <h3 className="text-2xl mb-3">
+            Energy Level
+          </h3>
 
-              </div>
+          <p className="text-[#6d675f]">
+            Match your schedule to your energy.
+          </p>
 
-              <div className="space-y-5">
+        </div>
 
-                {[
-                  "Biology Revision",
-                  "Math Practice",
-                  "Essay Writing",
-                  "Reading Session"
-                ].map((task) => (
+        {/* BALANCE */}
 
-                  <div
-                    key={task}
-                    className="
-                      rounded-[28px]
-                      bg-white/30
-                      border
-                      border-white/30
-                      p-6
+        <div className="liquid-glass rounded-[36px] p-8">
 
-                      flex
-                      justify-between
-                      items-center
+          <div className="text-5xl mb-5">
+            🦢
+          </div>
 
-                      hover:translate-x-1
-                      transition-all
-                    "
-                  >
+          <h3 className="text-2xl mb-3">
+            Balance
+          </h3>
 
-                    <div>
+          <p className="text-[#6d675f]">
+            Productivity without overwhelm.
+          </p>
 
-                      <h3 className="
-                        text-xl
-                        mb-2
-                      ">
-                        {task}
-                      </h3>
+        </div>
 
-                      <p className="
-                        text-[#777]
-                      ">
-                        Calm focus session
-                      </p>
+      </div>
 
-                    </div>
+      {/* TASK LIST */}
 
-                    <div className="
-                      px-4
-                      py-2
-                      rounded-full
-                      bg-[#f4ded3]
-                    ">
-                      Focus
-                    </div>
+      <div
+        className="
+          liquid-glass
+          rounded-[42px]
+          p-10
+          mb-8
+        "
+      >
 
-                  </div>
+        <h2 className="text-4xl mb-6">
+          Today's Tasks
+        </h2>
 
-                ))}
+        <div className="space-y-4">
 
-              </div>
+          <div className="glass rounded-[22px] p-5 flex gap-4 items-center">
+            <input type="checkbox" />
+            <span>Review biology notes</span>
+          </div>
 
-            </div>
+          <div className="glass rounded-[22px] p-5 flex gap-4 items-center">
+            <input type="checkbox" />
+            <span>Complete Pomodoro session</span>
+          </div>
 
-            {/* ENERGY */}
-
-            <div className="
-              liquid-glass
-              rounded-[40px]
-              p-8
-            ">
-
-              <div className="mb-8">
-
-                <p className="
-                  uppercase
-                  tracking-[0.2em]
-                  text-sm
-                  text-[#7e8b76]
-                  mb-3
-                ">
-                  Energy
-                </p>
-
-                <h2 className="
-                  text-4xl
-                ">
-                  Soft Momentum
-                </h2>
-
-              </div>
-
-              <div className="
-                rounded-[30px]
-                bg-gradient-to-br
-                from-[#dce9d0]
-                to-[#f6e5dc]
-
-                h-[260px]
-
-                flex
-                items-center
-                justify-center
-
-                text-7xl
-              ">
-                🦢
-              </div>
-
-            </div>
-
+          <div className="glass rounded-[22px] p-5 flex gap-4 items-center">
+            <input type="checkbox" />
+            <span>Journal for 10 minutes</span>
           </div>
 
         </div>
+
+      </div>
+
+      {/* WEEKLY GOAL */}
+
+      <div
+        className="
+          liquid-glass
+          rounded-[42px]
+          p-10
+        "
+      >
+
+        <p
+          className="
+            uppercase
+            tracking-[0.3em]
+            text-sm
+            text-[#7c8b68]
+            mb-4
+          "
+        >
+          Weekly Intention
+        </p>
+
+        <h2 className="text-5xl mb-4">
+          Consistency over intensity 🌸
+        </h2>
+
+        <p
+          className="
+            text-[#6f6a63]
+            max-w-3xl
+          "
+        >
+          Small daily actions create sustainable growth.
+        </p>
 
       </div>
 
