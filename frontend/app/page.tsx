@@ -1,195 +1,366 @@
-import Hero from "../components/sections/Hero"
-import MoodCard from "../components/ui/MoodCard"
-import DashboardShell from "../components/dashboard/DashboardShell"
-import AmbientBackground from "../components/ui/AmbientBackground"
+"use client"
+
+import {
+  Check,
+  Palette,
+} from "lucide-react"
+
+import Hero from "@/components/sections/Hero"
+import MoodCard from "@/components/ui/MoodCard"
+import AmbientBackground from "@/components/ui/AmbientBackground"
 import CursorGlow from "@/components/ui/CursorGlow"
+import AppShell from "@/components/layout/AppShell"
+
+import { useMood } from "@/components/theme/MoodContext"
+import { useTheme } from "@/components/theme/ThemeContext"
+
+/* =========================================================
+   THEME EFFECTS
+========================================================= */
+
+const themeEffects = {
+  morning: {
+    glowPrimary: "rgba(255, 229, 185, 0.28)",
+    glowSecondary: "rgba(215, 228, 197, 0.28)",
+    glowThird: "rgba(218, 227, 239, 0.22)",
+    surface: "rgba(255,255,255,0.26)",
+    border: "rgba(255,255,255,0.34)",
+  },
+
+  sunset: {
+    glowPrimary: "rgba(198, 128, 105, 0.26)",
+    glowSecondary: "rgba(210, 155, 133, 0.22)",
+    glowThird: "rgba(142, 111, 139, 0.18)",
+    surface: "rgba(255,247,242,0.24)",
+    border: "rgba(255,255,255,0.30)",
+  },
+
+  night: {
+    glowPrimary: "rgba(79, 98, 142, 0.28)",
+    glowSecondary: "rgba(51, 74, 105, 0.24)",
+    glowThird: "rgba(75, 63, 95, 0.20)",
+    surface: "rgba(18,24,38,0.30)",
+    border: "rgba(255,255,255,0.10)",
+  },
+} as const
+
+const themeNames = {
+  morning: "Morning",
+  sunset: "Sunset",
+  night: "Night",
+} as const
+
+/* =========================================================
+   PAGE
+========================================================= */
+
 export default function HomePage() {
+  const { moodData } = useMood()
+  const { theme } = useTheme()
+
+  /*
+    Forest został usunięty z Home.
+
+    Jeżeli ThemeContext jest już poprawiony i zawiera tylko:
+    morning | sunset | night
+    ten fallback praktycznie nigdy nie będzie potrzebny.
+  */
+
+  const safeTheme =
+    theme === "morning" ||
+    theme === "sunset" ||
+    theme === "night"
+      ? theme
+      : "morning"
+
+  const currentTheme = themeEffects[safeTheme]
+  const currentThemeName = themeNames[safeTheme]
+
+  const isNight = safeTheme === "night"
 
   return (
-
-    <main
-      className="
-        min-h-screen
-        relative
-        overflow-hidden
-        bg-[#f8f3eb]
-      "
-    >
-      <AmbientBackground />
-      <CursorGlow />
-      {/* FLOATING BLOBS */}
-
-      <div className="
-        absolute
-        top-[120px]
-        left-[80px]
-        w-[220px]
-        h-[220px]
-        rounded-full
-        bg-[#dfead4]
-        blur-[80px]
-        opacity-60
-        float-slow
-      " />
-
-      <div className="
-        absolute
-        top-[500px]
-        right-[100px]
-        w-[260px]
-        h-[260px]
-        rounded-full
-        bg-[#f6d3db]
-        blur-[100px]
-        opacity-50
-        float-slow
-      " />
-
-      <div className="
-        absolute
-        bottom-[120px]
-        left-[40%]
-        w-[180px]
-        h-[180px]
-        rounded-full
-        bg-[#dce5f2]
-        blur-[90px]
-        opacity-50
-        droplet
-      " />
-
-      {/* NAVBAR */}
-
-      <nav
+    <AppShell>
+      <main
         className="
-          max-w-[1600px]
-          mx-auto
-          px-8
-          py-8
-          flex
-          justify-between
-          items-center
+          min-h-screen
           relative
-          z-20
+          overflow-hidden
         "
       >
+        {/* =================================================
+            BACKGROUND
+        ================================================= */}
 
-        <h1 className="text-3xl text-[#2d2d2d]">
-          Study Zen
-        </h1>
+        <AmbientBackground />
+        <CursorGlow />
 
-        <div className="flex gap-4 items-center">
+        {/* THEME GLOW — LEFT */}
 
-          <button className="text-[#5e5a54]">
-            Login
-          </button>
+        <div
+          className="
+            fixed
+            top-[80px]
+            left-[22%]
+            w-[360px]
+            h-[360px]
+            rounded-full
+            blur-[130px]
+            opacity-60
+            pointer-events-none
+            transition-all
+            duration-700
+          "
+          style={{
+            background: currentTheme.glowPrimary,
+          }}
+        />
 
-          <button
+        {/* MOOD GLOW — RIGHT */}
+
+        <div
+          className="
+            fixed
+            top-[430px]
+            right-[3%]
+            w-[420px]
+            h-[420px]
+            rounded-full
+            blur-[140px]
+            opacity-45
+            pointer-events-none
+            transition-all
+            duration-700
+          "
+          style={{
+            background: "var(--mood-glow)",
+          }}
+        />
+
+        {/* BOTTOM GLOW */}
+
+        <div
+          className="
+            fixed
+            bottom-[20px]
+            left-[45%]
+            w-[320px]
+            h-[320px]
+            rounded-full
+            blur-[130px]
+            opacity-40
+            pointer-events-none
+            transition-all
+            duration-700
+          "
+          style={{
+            background: currentTheme.glowThird,
+          }}
+        />
+
+        {/* SMALL SECONDARY LIGHT */}
+
+        <div
+          className="
+            fixed
+            top-[18%]
+            right-[18%]
+            w-[220px]
+            h-[220px]
+            rounded-full
+            blur-[110px]
+            opacity-25
+            pointer-events-none
+            transition-all
+            duration-700
+          "
+          style={{
+            background: currentTheme.glowSecondary,
+          }}
+        />
+
+        {/* =================================================
+            HERO
+        ================================================= */}
+
+        <div className="relative z-10">
+          <Hero />
+        </div>
+
+        {/* =================================================
+            MOOD SPACES
+        ================================================= */}
+
+        <section
+          className="
+            app-container
+            section-spacing
+            relative
+            z-10
+          "
+        >
+          {/* HEADER */}
+
+          <div
             className="
-              glass
-              px-5
-              py-2
-              rounded-full
+              flex
+              flex-col
+              lg:flex-row
+              lg:justify-between
+              lg:items-end
+              gap-8
+              mb-12
             "
           >
-            Morning mood
-          </button>
+            <div>
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  uppercase
+                  tracking-[0.3em]
+                  text-xs
+                  mb-4
+                "
+                style={{
+                  color: "var(--mood-main)",
+                }}
+              >
+                <Palette size={15} />
 
-        </div>
+                <span>
+                  Choose your space
+                </span>
+              </div>
 
-      </nav>
+              <h2
+                className="
+                  text-5xl
+                  lg:text-6xl
+                  mb-4
+                "
+                style={{
+                  color: isNight
+                    ? "rgba(255,255,255,0.94)"
+                    : "var(--text-primary)",
+                }}
+              >
+                Mood Spaces
+              </h2>
 
-      {/* HERO */}
+              <p
+                className="
+                  max-w-xl
+                  leading-relaxed
+                  text-base
+                  lg:text-lg
+                "
+                style={{
+                  color: isNight
+                    ? "rgba(255,255,255,0.52)"
+                    : "var(--text-secondary)",
+                }}
+              >
+                Choose the emotional space that fits
+                what you need right now. Your selection
+                follows you through Study Zen.
+              </p>
+            </div>
 
-      <Hero />
+            {/* CURRENT SPACE */}
 
-      {/* MOODS */}
-
-      <section
-        className="
-        section-spacing
-        app-container
-        "
-      >
-
-        <div
-          className="
-            flex
-            justify-between
-            items-end
-            mb-10
-          "
-        >
-
-          <div>
-
-            <p
+            <div
               className="
-                uppercase
-                tracking-[0.3em]
-                text-sm
-                text-[#7c8b68]
-                mb-4
+                rounded-[30px]
+                border
+                px-5
+                py-4
+                backdrop-blur-2xl
+                flex
+                items-center
+                gap-4
+                min-w-[245px]
               "
+              style={{
+                background: currentTheme.surface,
+                borderColor: currentTheme.border,
+                boxShadow: isNight
+                  ? "0 18px 60px rgba(0,0,0,0.14)"
+                  : "0 18px 60px rgba(110,90,70,0.05)",
+              }}
             >
-              Choose your energy
-            </p>
+              <div
+                className="
+                  w-10
+                  h-10
+                  rounded-full
+                  flex
+                  items-center
+                  justify-center
+                  shrink-0
+                "
+                style={{
+                  background: "var(--mood-main)",
+                  color: "white",
+                }}
+              >
+                <Check size={16} />
+              </div>
 
-            <h2
-              className="
-                text-5xl
-                text-[#2d2d2d]
-              "
-            >
-              Mood Spaces
-            </h2>
+              <div>
+                <p
+                  className="
+                    text-[10px]
+                    uppercase
+                    tracking-[0.24em]
+                    mb-1
+                  "
+                  style={{
+                    color: isNight
+                      ? "rgba(255,255,255,0.40)"
+                      : "var(--text-secondary)",
+                  }}
+                >
+                  Current space
+                </p>
 
+                <p
+                  className="font-medium"
+                  style={{
+                    color: isNight
+                      ? "rgba(255,255,255,0.90)"
+                      : "var(--text-primary)",
+                  }}
+                >
+                  {moodData.name} +{" "}
+                  {currentThemeName}
+                </p>
+              </div>
+            </div>
           </div>
 
-        </div>
+          {/* =================================================
+              MOOD CARDS
+          ================================================= */}
 
-        <div
-          className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            lg:grid-cols-4
-            gap-6
-          "
-        >
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              xl:grid-cols-4
+              gap-6
+            "
+          >
+            <MoodCard mood="calm" />
+            <MoodCard mood="focus" />
+            <MoodCard mood="reflect" />
+            <MoodCard mood="restore" />
+          </div>
+        </section>
 
-          <MoodCard
-            emoji="🦢"
-            title="Calm"
-            subtitle="Soft flow, deep breath, clarity."
-            color="#dbe9d0"
-          />
-
-          <MoodCard
-            emoji="🐈"
-            title="Focus"
-            subtitle="Quiet concentration and deep work."
-            color="#d7dff1"
-          />
-
-          <MoodCard
-            emoji="🦋"
-            title="Dreamy"
-            subtitle="Gentle pace and reflective energy."
-            color="#f6d3db"
-          />
-
-          <MoodCard
-            emoji="🦌"
-            title="Reset"
-            subtitle="Slow mornings and nervous system care."
-            color="#e9dcc8"
-          />
-
-        </div>
-
-      </section>
-      {/* <DashboardShell /> */}
-    </main>
+        <div className="h-24" />
+      </main>
+    </AppShell>
   )
 }
