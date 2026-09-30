@@ -1,42 +1,74 @@
 # Study Zen
-Study Zen is a Python console application that helps students plan their study time efficiently by breaking learning material into manageable daily tasks.
+Study Zen is a responsive productivity application designed to combine focused study, planning, reflection, and visual progress tracking in one interface.
 
-## Project goal
-The goal of this project is to build a simple system but extensible study planning system that calculates daily study workload and helps manage multiple exams based on urgency and available time.
+## Live Demo
+https://smart-study-planner-1o8z.onrender.com
 
-## Features (initial version)
-- Calculate daily number of pages to study
-- Generate a day-by-day study schedule
-- Support multiple exams at the same time
-- Assign exam priority based on days left (HIGH / MEDIUM / LOW)
-- Save study plans to a JSON file
-- Modular project structure (separated logic, storage and main app)
+## Features
+### Focus
+- Custom study subjects
+- Focus timer
+- Session tracking
+- Completed session history
 
-## Technologies Used
-- Python
-- Git / GitHub 
-- JSON for persistent storage
-- Command-line interface (CLI)
+### Planner
+- Calendar-based task management
+- Task dates, times, and categories
+- Completion tracking
+- Monthly intentions
 
-## How It Works 
-The user provides the total number of pages and available days. The application calculates the daily workload and generates a study schedule. For multiple exams, the system calculates daily pages per subject and assigns priorities based on the remaining time.
+### Journal
+- Mood-based reflection prompts
+- Free-form journal entries
+- Entry history and management
 
-## How to run
-1. Clone the repository
-2. Make sure Python 3 is installed 
-3. Run "python main.py"
-4. Follow the instructions displayed in the terminal
+### Garden
+- Visual representation of user progress
+- Multiple plant types and growth stages
+- Progress based on activity across the application
+- Mood-specific environments
 
-## Example Output 
-"Daily study schedule:
-Day 1: 3 pages
-Day 2: 3 pages
-...
-Exam overview:
-Biology | 12.0 pages/day | 10 days left | PRIORITY: MEDIUM
-Math | 4.0 pages/day | 20 days left | PRIORITY: MEDIUM
-CS | 2.0 pages/day | 30 days left | PRIORITY: LOW"
+### Personalization
+- Four moods: Calm, Focus, Reflect, Restore
+- Four visual themes: Morning, Forest, Sunset, Night
+- Consistent theme and mood system across the application
 
-## Status 
-This project is under active development and is being expanded step by step as a learning-focused CS project.
+## Tech Stack
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Lucide React
+- LocalStorage
 
+## Data Storage
+The current version uses browser LocalStorage to persist focus sessions, planner tasks, journal entries, preferences, and other application data.
+
+## Local Development
+Clone the repository:
+
+```bash
+git clone https://github.com/lena-Win/smart-study-planner.git
+```
+
+Install dependencies:
+
+```bash
+cd smart-study-planner/frontend
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+## Production Build
+
+```bash
+npm run build
+npm start
+```
