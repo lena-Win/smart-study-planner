@@ -50,23 +50,23 @@ export const moodData: Record<MoodId, MoodData> = {
     },
 
     images: {
-      hero: "/images/moods/calm/hero.jpg",
-      dashboard: "/images/moods/calm/dashboard.jpg",
-      focus: "/images/moods/calm/focus.jpg",
-      planner: "/images/moods/calm/planner.jpg",
+      hero: "/images/moods/calm/hero.webp",
+      dashboard: "/images/moods/calm/dashboard.webp",
+      focus: "/images/moods/calm/focus.webp",
+      planner: "/images/moods/calm/planner.webp",
     },
 
     garden: {
-      lotus: "/images/moods/calm/garden/lotus.jpg",
-      waterLily: "/images/moods/calm/garden/water-lily.jpg",
-      animal: "/images/moods/calm/garden/swan.jpg",
-      stones: "/images/moods/calm/garden/stones.jpg",
+      lotus: "/images/moods/calm/garden/lotus.webp",
+      waterLily: "/images/moods/calm/garden/water-lily.webp",
+      animal: "/images/moods/calm/garden/swan.webp",
+      stones: "/images/moods/calm/garden/stones.webp",
     },
 
     textures: {
-      primary: "/images/moods/calm/textures/water.jpg",
-      secondary: "/images/moods/calm/textures/linen.jpg",
-      subtle: "/images/moods/calm/textures/window-shadow.jpg",
+      primary: "/images/moods/calm/textures/water.webp",
+      secondary: "/images/moods/calm/textures/linen.webp",
+      subtle: "/images/moods/calm/textures/window-shadow.webp",
     },
   },
 
@@ -123,14 +123,14 @@ export const moodData: Record<MoodId, MoodData> = {
     },
 
     garden: {
-      lotus: "/images/moods/reflect/garden/lotus.jpg",
+      lotus: "/images/moods/reflect/garden/lotus.webp",
       waterLily: "/images/moods/reflect/garden/water-lily.jpg",
       animal: "/images/moods/reflect/garden/animal.jpg",
       stones: "/images/moods/reflect/garden/stones.jpg",
     },
 
     textures: {
-      primary: "/images/moods/reflect/textures/paper.jpg",
+      primary: "/images/moods/reflect/textures/paper.webp",
       secondary: "/images/moods/reflect/textures/fabric.jpg",
       subtle: "/images/moods/reflect/textures/shadow.jpg",
     },
@@ -163,7 +163,7 @@ export const moodData: Record<MoodId, MoodData> = {
     },
 
     textures: {
-      primary: "/images/moods/restore/textures/wood.jpg",
+      primary: "/images/moods/restore/textures/wood.webp",
       secondary: "/images/moods/restore/textures/fabric.jpg",
       subtle: "/images/moods/restore/textures/shadow.jpg",
     },

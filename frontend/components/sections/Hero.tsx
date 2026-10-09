@@ -23,7 +23,7 @@ const heroContent = {
     subtitle:
       "Gentle productivity inspired by nature, mindfulness and intentional living.",
 
-    image: "/images/moods/calm/hero.jpg",
+    image: "/images/moods/calm/hero.webp",
 
     cardOneLabel: "Today's Mood",
     cardOneTitle: "Calm",
@@ -51,7 +51,7 @@ const heroContent = {
     subtitle:
       "Build meaningful focus sessions with fewer distractions and more intentional attention.",
 
-    image: "/images/moods/focus/focus-hero.jpg",
+    image: "/images/moods/focus/focus-hero.webp",
 
     cardOneLabel: "Today's Mood",
     cardOneTitle: "Focus",
@@ -79,7 +79,7 @@ const heroContent = {
     subtitle:
       "Slow down, notice what matters and give your thoughts room to unfold naturally.",
 
-    image: "/images/moods/reflect/reflect-hero.jpg",
+    image: "/images/moods/reflect/reflect-hero.webp",
 
     cardOneLabel: "Today's Mood",
     cardOneTitle: "Reflect",
@@ -107,7 +107,7 @@ const heroContent = {
     subtitle:
       "Create space for recovery, stillness and a more balanced rhythm.",
 
-    image: "/images/moods/restore/restore-hero.jpg",
+    image: "/images/moods/restore/restore-hero.webp",
 
     cardOneLabel: "Today's Mood",
     cardOneTitle: "Restore",

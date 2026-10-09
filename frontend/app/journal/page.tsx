@@ -61,7 +61,7 @@ const journalContent = {
     noteTitle: "Quiet Notes",
     placeholder:
       "Write without rushing. What is present in your mind right now?",
-    image: "/images/moods/calm/journal.jpg",
+    image: "/images/moods/calm/journal.webp",
     imageLabel: "A quiet place to slow down",
     prompts: [
       {
@@ -89,7 +89,7 @@ const journalContent = {
     noteTitle: "Focus Notes",
     placeholder:
       "What needs your attention? Write down the thoughts you want to organize...",
-    image: "/images/moods/focus/focus-journal.jpg",
+    image: "/images/moods/focus/focus-journal.webp",
     imageLabel: "Clear your mind before you begin",
     prompts: [
       {
@@ -117,7 +117,7 @@ const journalContent = {
     noteTitle: "Reflection Pages",
     placeholder:
       "Let the thought unfold. What have you been carrying with you lately?",
-    image: "/images/moods/reflect/reflect-journal.jpg",
+    image: "/images/moods/reflect/reflect-journal.webp",
     imageLabel: "Give your thoughts room to unfold",
     prompts: [
       {
@@ -145,7 +145,7 @@ const journalContent = {
     noteTitle: "Rest Notes",
     placeholder:
       "You do not need to solve anything here. Write what you would like to release...",
-    image: "/images/moods/restore/restore-journal.jpg",
+    image: "/images/moods/restore/restore-journal.webp",
     imageLabel: "Nothing needs to be solved right now",
     prompts: [
       {

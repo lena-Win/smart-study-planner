@@ -58,7 +58,7 @@ const focusContent: Record<MoodId, FocusMoodContent> = {
     title: "Calm Sanctuary",
     description:
       "Focus without pressure. Move through one task at a time with a softer, steadier rhythm.",
-    image: "/images/moods/calm/focus.jpg",
+    image: "/images/moods/calm/focus.webp",
     imageLabel: "Quiet focus, steady rhythm",
     icon: Waves,
   },
@@ -67,7 +67,7 @@ const focusContent: Record<MoodId, FocusMoodContent> = {
     title: "Focus Sanctuary",
     description:
       "Protect your attention, reduce distraction and create space for meaningful deep work.",
-    image: "/images/moods/focus/focus-focus.jpg",
+    image: "/images/moods/focus/focus-focus.webp",
     imageLabel: "A space built for deep work",
     icon: Target,
   },
@@ -76,7 +76,7 @@ const focusContent: Record<MoodId, FocusMoodContent> = {
     title: "Reflect Sanctuary",
     description:
       "Give ideas enough quiet to develop. A softer space for writing, thinking and creative work.",
-    image: "/images/moods/reflect/reflect-focus.jpg",
+    image: "/images/moods/reflect/reflect-focus.webp",
     imageLabel: "Room for ideas to unfold",
     icon: Feather,
   },
@@ -85,7 +85,7 @@ const focusContent: Record<MoodId, FocusMoodContent> = {
     title: "Restore Sanctuary",
     description:
       "Work with the energy you have. Keep the pace gentle and leave room for recovery.",
-    image: "/images/moods/restore/restore-focus.jpg",
+    image: "/images/moods/restore/restore-focus.webp",
     imageLabel: "Gentle work without pressure",
     icon: MoonStar,
   },
