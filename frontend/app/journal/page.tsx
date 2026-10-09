@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import {
   useEffect,
   useState,
@@ -34,13 +34,11 @@ import {
   getJournalEntries,
   saveJournalEntries,
 } from "@/components/data/studyData"
-
 type Prompt = {
   title: string
   question: string
   icon: LucideIcon
 }
-
 type JournalMoodContent = {
   eyebrow: string
   title: string
@@ -51,7 +49,6 @@ type JournalMoodContent = {
   imageLabel: string
   prompts: readonly Prompt[]
 }
-
 const journalContent = {
   calm: {
     eyebrow: "Gentle reflection",
@@ -166,7 +163,6 @@ const journalContent = {
     ],
   },
 } as const satisfies Record<MoodId, JournalMoodContent>
-
 const themeEffects = {
   morning: {
     imageFilter:
@@ -259,14 +255,12 @@ const themeEffects = {
     innerLight: "rgba(255,255,255,0.12)",
   },
 } as const
-
 const moodNames: Record<MoodId, string> = {
   calm: "Calm",
   focus: "Focus",
   reflect: "Reflect",
   restore: "Restore",
 }
-
 function formatEntryDate(date: string) {
   return new Intl.DateTimeFormat("en", {
     day: "numeric",
@@ -276,7 +270,6 @@ function formatEntryDate(date: string) {
     minute: "2-digit",
   }).format(new Date(date))
 }
-
 export default function JournalPage() {
   const { mood } = useMood()
   const { theme } = useTheme()
@@ -295,7 +288,6 @@ export default function JournalPage() {
   const [entries, setEntries] = useState<JournalEntry[]>([])
   const [saved, setSaved] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
-
   useEffect(() => {
     try {
       const storedEntries = getJournalEntries()
@@ -307,12 +299,10 @@ export default function JournalPage() {
     }
     setIsLoaded(true)
   }, [])
-
   useEffect(() => {
     setSelectedPrompt(null)
     setSaved(false)
   }, [mood])
-
   const saveEntry = () => {
     const cleanText = journalText.trim()
     if (!cleanText) return
@@ -336,7 +326,6 @@ export default function JournalPage() {
       setSaved(false)
     }, 2200)
   }
-
   const deleteEntry = (id: string) => {
     const updatedEntries = entries.filter(
       (entry) => entry.id !== id
@@ -344,7 +333,6 @@ export default function JournalPage() {
     setEntries(updatedEntries)
     saveJournalEntries(updatedEntries)
   }
-
   const openEntry = (entry: JournalEntry) => {
     setJournalText(entry.text)
     if (entry.mood === mood) {
@@ -358,7 +346,6 @@ export default function JournalPage() {
       behavior: "smooth",
     })
   }
-
   const crystalStyle: CSSProperties = {
     background: currentTheme.surface,
     border: `1px solid ${currentTheme.border}`,
@@ -369,7 +356,6 @@ export default function JournalPage() {
       })
     `,
   }
-
   const softCrystalStyle: CSSProperties = {
     background: currentTheme.softSurface,
     border: `1px solid ${currentTheme.border}`,
@@ -380,7 +366,6 @@ export default function JournalPage() {
       })
     `,
   }
-
   return (
     <AppShell>
       <main
@@ -487,18 +472,14 @@ export default function JournalPage() {
                 "0 30px 90px rgba(0,0,0,0.08)",
             }}
           >
-            <img
+            <Image
               src={current.image}
               alt={`${current.title} atmosphere`}
-              className="
-                absolute
-                inset-0
-                w-full
-                h-full
-                object-cover
-                transition-all
-                duration-700
-              "
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 1200px"
+              quality={82}
+              className="object-cover transition-all duration-700"
               style={{
                 filter: currentTheme.imageFilter,
               }}

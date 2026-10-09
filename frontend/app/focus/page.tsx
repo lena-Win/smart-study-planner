@@ -28,6 +28,7 @@ import AppShell from "@/components/layout/AppShell"
 import { useMood } from "@/components/theme/MoodContext"
 import { useTheme } from "@/components/theme/ThemeContext"
 import type { MoodId } from "@/components/mood/moodData"
+import Image from "next/image"
 import type {
   FocusSession,
   FocusSubject,
@@ -629,16 +630,14 @@ export default function FocusPage() {
                   rounded-[34px]
                 "
               >
-                <img
+                <Image
                   src={current.image}
                   alt={`${current.title} atmosphere`}
-                  className="
-                    absolute
-                    inset-0
-                    w-full
-                    h-full
-                    object-cover
-                  "
+                  fill
+                  priority
+                  sizes="(max-width: 1280px) 100vw, 55vw"
+                  quality={82}
+                  className="object-cover"
                   style={{
                     filter: currentTheme.imageFilter,
                   }}
