@@ -5,176 +5,141 @@ import type {
   PlannerTask,
 } from "./types"
 
-/* =========================================================
-   STORAGE KEYS
-========================================================= */
-
 export const STUDY_STORAGE_KEYS = {
-  focusSubjects:
-    "study-zen-focus-subjects",
-
-  focusSessions:
-    "study-zen-focus-sessions",
-
-  plannerTasks:
-    "study-zen-planner-calendar-tasks",
-
-  plannerIntention:
-    "study-zen-monthly-intention",
-
-  journalEntries:
-    "study-zen-journal",
+  focusSubjects: "study-zen-focus-subjects",
+  focusSessions: "study-zen-focus-sessions",
+  plannerTasks: "study-zen-planner-calendar-tasks",
+  plannerIntention: "study-zen-monthly-intention",
+  journalEntries: "study-zen-journal",
 } as const
 
-/* =========================================================
-   SAFE LOCAL STORAGE
-========================================================= */
+type Validator<T> = (value: unknown) => value is T
 
-function readStorage<T>(
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function isMood(value: unknown): value is FocusSession["mood"] {
+  return value === "calm" ||
+    value === "focus" ||
+    value === "reflect" ||
+    value === "restore"
+}
+
+function isFocusSubject(value: unknown): value is FocusSubject {
+  if (!isRecord(value)) return false
+  return typeof value.id === "string" &&
+    typeof value.name === "string" &&
+    typeof value.color === "string"
+}
+
+function isFocusSession(value: unknown): value is FocusSession {
+  if (!isRecord(value)) return false
+  return typeof value.id === "string" &&
+    typeof value.subjectId === "string" &&
+    typeof value.subjectName === "string" &&
+    typeof value.duration === "number" &&
+    Number.isFinite(value.duration) &&
+    typeof value.completedAt === "string" &&
+    isMood(value.mood)
+}
+
+function isPlannerTask(value: unknown): value is PlannerTask {
+  if (!isRecord(value)) return false
+  return typeof value.id === "string" &&
+    typeof value.text === "string" &&
+    typeof value.date === "string" &&
+    typeof value.time === "string" &&
+    typeof value.color === "string" &&
+    typeof value.completed === "boolean" &&
+    typeof value.createdAt === "string"
+}
+
+function isJournalEntry(value: unknown): value is JournalEntry {
+  if (!isRecord(value)) return false
+  return typeof value.id === "string" &&
+    typeof value.text === "string" &&
+    isMood(value.mood) &&
+    (value.prompt === null || typeof value.prompt === "string") &&
+    typeof value.createdAt === "string"
+}
+
+function readArrayStorage<T>(
   key: string,
-  fallback: T
-): T {
-  if (typeof window === "undefined") {
-    return fallback
-  }
-
+  validate: Validator<T>
+): T[] {
+  if (typeof window === "undefined") return []
   try {
-    const raw =
-      window.localStorage.getItem(key)
-
-    if (!raw) {
-      return fallback
+    const raw = window.localStorage.getItem(key)
+    if (raw === null) return []
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) {
+      console.warn(`Invalid Study Zen storage format: ${key}`)
+      return []
     }
-
-    return JSON.parse(raw) as T
+    return parsed.filter(validate)
   } catch (error) {
-    console.error(
-      `Could not read Study Zen storage: ${key}`,
-      error
-    )
-
-    return fallback
+    console.error(`Could not read Study Zen storage: ${key}`, error)
+    return []
   }
 }
 
-function writeStorage<T>(
-  key: string,
-  value: T
-) {
-  if (typeof window === "undefined") {
-    return
-  }
-
+function writeStorage<T>(key: string, value: T): void {
+  if (typeof window === "undefined") return
   try {
-    window.localStorage.setItem(
-      key,
-      JSON.stringify(value)
-    )
+    window.localStorage.setItem(key, JSON.stringify(value))
   } catch (error) {
-    console.error(
-      `Could not save Study Zen storage: ${key}`,
-      error
-    )
+    console.error(`Could not save Study Zen storage: ${key}`, error)
   }
 }
 
-/* =========================================================
-   FOCUS
-========================================================= */
-
-export function getFocusSubjects() {
-  return readStorage<FocusSubject[]>(
-    STUDY_STORAGE_KEYS.focusSubjects,
-    []
-  )
+export function getFocusSubjects(): FocusSubject[] {
+  return readArrayStorage(STUDY_STORAGE_KEYS.focusSubjects, isFocusSubject)
 }
 
-export function saveFocusSubjects(
-  subjects: FocusSubject[]
-) {
-  writeStorage(
-    STUDY_STORAGE_KEYS.focusSubjects,
-    subjects
-  )
+export function saveFocusSubjects(subjects: FocusSubject[]): void {
+  writeStorage(STUDY_STORAGE_KEYS.focusSubjects, subjects)
 }
 
-export function getFocusSessions() {
-  return readStorage<FocusSession[]>(
-    STUDY_STORAGE_KEYS.focusSessions,
-    []
-  )
+export function getFocusSessions(): FocusSession[] {
+  return readArrayStorage(STUDY_STORAGE_KEYS.focusSessions, isFocusSession)
 }
 
-export function saveFocusSessions(
-  sessions: FocusSession[]
-) {
-  writeStorage(
-    STUDY_STORAGE_KEYS.focusSessions,
-    sessions
-  )
+export function saveFocusSessions(sessions: FocusSession[]): void {
+  writeStorage(STUDY_STORAGE_KEYS.focusSessions, sessions)
 }
 
-/* =========================================================
-   PLANNER
-========================================================= */
-
-export function getPlannerTasks() {
-  return readStorage<PlannerTask[]>(
-    STUDY_STORAGE_KEYS.plannerTasks,
-    []
-  )
+export function getPlannerTasks(): PlannerTask[] {
+  return readArrayStorage(STUDY_STORAGE_KEYS.plannerTasks, isPlannerTask)
 }
 
-export function savePlannerTasks(
-  tasks: PlannerTask[]
-) {
-  writeStorage(
-    STUDY_STORAGE_KEYS.plannerTasks,
-    tasks
-  )
+export function savePlannerTasks(tasks: PlannerTask[]): void {
+  writeStorage(STUDY_STORAGE_KEYS.plannerTasks, tasks)
 }
 
-export function getPlannerIntention() {
-  if (typeof window === "undefined") {
+export function getPlannerIntention(): string {
+  if (typeof window === "undefined") return ""
+  try {
+    return window.localStorage.getItem(STUDY_STORAGE_KEYS.plannerIntention) ?? ""
+  } catch (error) {
+    console.error("Could not read Study Zen planner intention", error)
     return ""
   }
-
-  return (
-    window.localStorage.getItem(
-      STUDY_STORAGE_KEYS.plannerIntention
-    ) ?? ""
-  )
 }
 
-export function savePlannerIntention(
-  intention: string
-) {
-  if (typeof window === "undefined") {
-    return
+export function savePlannerIntention(intention: string): void {
+  if (typeof window === "undefined") return
+  try {
+    window.localStorage.setItem(STUDY_STORAGE_KEYS.plannerIntention, intention)
+  } catch (error) {
+    console.error("Could not save Study Zen planner intention", error)
   }
-
-  window.localStorage.setItem(
-    STUDY_STORAGE_KEYS.plannerIntention,
-    intention
-  )
 }
 
-/* =========================================================
-   JOURNAL
-========================================================= */
-
-export function getJournalEntries() {
-  return readStorage<JournalEntry[]>(
-    STUDY_STORAGE_KEYS.journalEntries,
-    []
-  )
+export function getJournalEntries(): JournalEntry[] {
+  return readArrayStorage(STUDY_STORAGE_KEYS.journalEntries, isJournalEntry)
 }
 
-export function saveJournalEntries(
-  entries: JournalEntry[]
-) {
-  writeStorage(
-    STUDY_STORAGE_KEYS.journalEntries,
-    entries
-  )
+export function saveJournalEntries(entries: JournalEntry[]): void {
+  writeStorage(STUDY_STORAGE_KEYS.journalEntries, entries)
 }
