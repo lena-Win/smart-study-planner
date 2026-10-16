@@ -43,13 +43,11 @@ export function ThemeProvider({
   children: ReactNode
 }) {
   const [theme, setThemeState] = useState<Theme>("morning")
-  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     const savedTheme = readSavedTheme()
     queueMicrotask(() => {
       setThemeState(savedTheme)
-      setIsLoaded(true)
     })
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY)
@@ -70,20 +68,14 @@ export function ThemeProvider({
     }
   }
 
-  if (!isLoaded) return null
-
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <div
-        className={`theme-${theme} min-h-screen`}
-        data-theme={theme}
-      >
+      <div className={'theme-${theme} min-h-screen'} data-theme={theme}>
         {children}
       </div>
     </ThemeContext.Provider>
   )
 }
-
 export function useTheme() {
   return useContext(ThemeContext)
 }
