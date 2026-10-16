@@ -6,67 +6,74 @@ import {
   useState,
   type ReactNode,
 } from "react"
-export type Theme =
-  | "morning"
-  | "sunset"
-  | "night"
+
+export type Theme = "morning" | "sunset" | "night"
+
 type ThemeContextType = {
   theme: Theme
   setTheme: (theme: Theme) => void
 }
+
+const STORAGE_KEY = "study-zen-theme"
+
 const ThemeContext = createContext<ThemeContextType>({
   theme: "morning",
   setTheme: () => {},
 })
+
+function isTheme(value: string | null): value is Theme {
+  return value === "morning" ||
+    value === "sunset" ||
+    value === "night"
+}
+
+function readSavedTheme(): Theme {
+  if (typeof window === "undefined") return "morning"
+  try {
+    const savedTheme = window.localStorage.getItem(STORAGE_KEY)
+    return isTheme(savedTheme) ? savedTheme : "morning"
+  } catch {
+    return "morning"
+  }
+}
+
 export function ThemeProvider({
   children,
 }: {
   children: ReactNode
 }) {
-  const [theme, setThemeState] =
-    useState<Theme>("morning")
+  const [theme, setThemeState] = useState<Theme>("morning")
   const [isLoaded, setIsLoaded] = useState(false)
+
   useEffect(() => {
-    const savedTheme = localStorage.getItem(
-      "study-zen-theme"
-    )
-    if (
-      savedTheme === "morning" ||
-      savedTheme === "sunset" ||
-      savedTheme === "night"
-    ) {
+    const savedTheme = readSavedTheme()
+    queueMicrotask(() => {
       setThemeState(savedTheme)
-    } else {
-      /*
-       * Jeżeli użytkownik miał wcześniej zapisany
-       * usunięty motyw Forest, automatycznie
-       * przechodzimy na Morning.
-       */
-      setThemeState("morning")
-      localStorage.setItem(
-        "study-zen-theme",
-        "morning"
-      )
+      setIsLoaded(true)
+    })
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY)
+      if (!isTheme(stored)) {
+        window.localStorage.setItem(STORAGE_KEY, "morning")
+      }
+    } catch (error) {
+      console.error("Could not access Study Zen theme storage", error)
     }
-    setIsLoaded(true)
   }, [])
+
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)
-    localStorage.setItem(
-      "study-zen-theme",
-      newTheme
-    )
+    try {
+      window.localStorage.setItem(STORAGE_KEY, newTheme)
+    } catch (error) {
+      console.error("Could not save Study Zen theme", error)
+    }
   }
-  if (!isLoaded) {
-    return null
-  }
+
+  if (!isLoaded) return null
+
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        setTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       <div
         className={`theme-${theme} min-h-screen`}
         data-theme={theme}
@@ -76,6 +83,7 @@ export function ThemeProvider({
     </ThemeContext.Provider>
   )
 }
+
 export function useTheme() {
   return useContext(ThemeContext)
 }

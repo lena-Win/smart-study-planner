@@ -291,17 +291,24 @@ export default function JournalPage() {
   useEffect(() => {
     try {
       const storedEntries = getJournalEntries()
-      if (Array.isArray(storedEntries)) {
-        setEntries(storedEntries)
-      }
+      queueMicrotask(() => {
+        if (Array.isArray(storedEntries)) {
+          setEntries(storedEntries)
+        }
+        setIsLoaded(true)
+      })
     } catch {
       console.error("Could not load journal entries.")
+      queueMicrotask(() => {
+        setIsLoaded(true)
+      })
     }
-    setIsLoaded(true)
   }, [])
   useEffect(() => {
-    setSelectedPrompt(null)
-    setSaved(false)
+    queueMicrotask(() => {
+      setSelectedPrompt(null)
+      setSaved(false)
+    })
   }, [mood])
   const saveEntry = () => {
     const cleanText = journalText.trim()

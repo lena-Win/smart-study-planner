@@ -242,11 +242,13 @@ export default function PlannerPage() {
             100
         )
   useEffect(() => {
+    let normalized: PlannerTask[] = []
+    let initialIntention: string = plannerContent.calm.defaultIntention
     try {
       const storedTasks = getPlannerTasks()
       const storedIntention = getPlannerIntention()
       if (Array.isArray(storedTasks)) {
-        const normalized: PlannerTask[] = storedTasks.map((task) => ({
+        normalized = storedTasks.map((task) => ({
           id: task.id ?? crypto.randomUUID(),
           text: task.text ?? "",
           date: task.date ?? dateKey(new Date()),
@@ -255,18 +257,18 @@ export default function PlannerPage() {
           completed: task.completed ?? false,
           createdAt: task.createdAt ?? new Date().toISOString(),
         }))
-        setTasks(normalized)
       }
       if (storedIntention) {
-        setIntention(storedIntention)
-      } else {
-        setIntention(current.defaultIntention)
+        initialIntention = storedIntention
       }
     } catch {
       console.error("Could not load planner data.")
-      setIntention(current.defaultIntention)
     }
-    setIsLoaded(true)
+    queueMicrotask(() => {
+      setTasks(normalized)
+      setIntention(initialIntention)
+      setIsLoaded(true)
+    })
   }, [])
   const saveTasks = (updatedTasks: PlannerTask[]) => {
     setTasks(updatedTasks)

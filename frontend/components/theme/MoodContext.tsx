@@ -1,5 +1,4 @@
 "use client"
-
 import {
   createContext,
   useContext,
@@ -8,7 +7,6 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react"
-
 import {
   type MoodId,
   type MoodData,
@@ -21,11 +19,30 @@ type MoodContextType = {
   setMood: (mood: MoodId) => void
 }
 
+const STORAGE_KEY = "study-zen-mood"
+
 const MoodContext = createContext<MoodContextType>({
   mood: "calm",
   moodData: moodData.calm,
   setMood: () => {},
 })
+
+function isMood(value: string | null): value is MoodId {
+  return value === "calm" ||
+    value === "focus" ||
+    value === "reflect" ||
+    value === "restore"
+}
+
+function readSavedMood(): MoodId {
+  if (typeof window === "undefined") return "calm"
+  try {
+    const savedMood = window.localStorage.getItem(STORAGE_KEY)
+    return isMood(savedMood) ? savedMood : "calm"
+  } catch {
+    return "calm"
+  }
+}
 
 export function MoodProvider({
   children,
@@ -36,30 +53,25 @@ export function MoodProvider({
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    const savedMood = localStorage.getItem("study-zen-mood")
-
-    if (
-      savedMood === "calm" ||
-      savedMood === "focus" ||
-      savedMood === "reflect" ||
-      savedMood === "restore"
-    ) {
+    const savedMood = readSavedMood()
+    queueMicrotask(() => {
       setMoodState(savedMood)
-    }
-
-    setIsLoaded(true)
+      setIsLoaded(true)
+    })
   }, [])
 
   const setMood = (newMood: MoodId) => {
     setMoodState(newMood)
-    localStorage.setItem("study-zen-mood", newMood)
+    try {
+      window.localStorage.setItem(STORAGE_KEY, newMood)
+    } catch (error) {
+      console.error("Could not save Study Zen mood", error)
+    }
   }
 
   const currentMood = moodData[mood]
 
-  if (!isLoaded) {
-    return null
-  }
+  if (!isLoaded) return null
 
   return (
     <MoodContext.Provider

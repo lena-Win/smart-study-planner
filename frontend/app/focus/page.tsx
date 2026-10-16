@@ -92,8 +92,7 @@ const focusContent: Record<MoodId, FocusMoodContent> = {
   },
 }
 /* =========================================================
-   THEME EFFECTS
-   Forest intentionally removed.
+   THEME EFFECT
 ========================================================= */
 const themeEffects = {
   morning: {
@@ -291,11 +290,13 @@ export default function FocusPage() {
   useEffect(() => {
     const storedSubjects = getFocusSubjects()
     const storedSessions = getFocusSessions()
-    setSubjects(storedSubjects)
-    setSessions(storedSessions)
-    if (storedSubjects.length > 0) {
-      setSelectedSubjectId(storedSubjects[0].id)
-    }
+    queueMicrotask(() => {
+      setSubjects(storedSubjects)
+      setSessions(storedSessions)
+      if (storedSubjects.length > 0) {
+        setSelectedSubjectId(storedSubjects[0].id)
+      }
+    })
   }, [])
   /* =========================================================
      TIMER EFFECT
@@ -350,9 +351,11 @@ export default function FocusPage() {
       ...sessions,
       completedSession,
     ]
-    setSessions(updatedSessions)
-    saveFocusSessions(updatedSessions)
     sessionSavedRef.current = true
+    saveFocusSessions(updatedSessions)
+    queueMicrotask(() => {
+      setSessions(updatedSessions)
+    })
   }, [
     secondsLeft,
     selectedMinutes,
