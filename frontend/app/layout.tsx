@@ -14,29 +14,47 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html 
+    <html
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      >
-      <body className="min-h-screen">
+    >
+      <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              try {
-                const saved = localStorage.getItem("study-zen-theme");
-                const theme = ["morning", "sunset", "night"].includes(saved)
-                  ? saved
-                  : "morning";
-                document.documentElement.dataset.theme = theme;
-                document.documentElement.classList.add("theme-" + theme);
-              } catch {
-                document.documentElement.dataset.theme = "morning";
-                document.documentElement.classList.add("theme-morning");
-              }
+              (function () {
+                var theme = "morning";
+
+                try {
+                  var saved = localStorage.getItem("study-zen-theme");
+
+                  if (
+                    saved === "morning" ||
+                    saved === "sunset" ||
+                    saved === "night"
+                  ) {
+                    theme = saved;
+                  }
+                } catch {}
+
+                var root = document.documentElement;
+
+                root.classList.remove(
+                  "theme-morning",
+                  "theme-sunset",
+                  "theme-night"
+                );
+
+                root.classList.add("theme-" + theme);
+                root.dataset.theme = theme;
+              })();
             `,
-            }}
-          />
+          }}
+        />
+      </head>
+
+      <body className="min-h-screen">
         <ThemeProvider>
           <MoodProvider>
             {children}
