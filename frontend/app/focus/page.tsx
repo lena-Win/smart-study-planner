@@ -227,11 +227,6 @@ export default function FocusPage() {
   const { theme } = useTheme()
   const current = focusContent[mood]
   const SanctuaryIcon = current.icon
-  /*
-    Forest is being removed from the app.
-    This fallback prevents Focus from crashing while the
-    rest of ThemeContext is being cleaned up.
-  */
   const supportedTheme: SupportedFocusTheme =
     theme === "night"
       ? "night"
@@ -243,6 +238,7 @@ export default function FocusPage() {
   /* =========================
      TIMER
   ========================= */
+  const FOCUS_TIMER_KEY = "study-zen-focus-timer"
   const [selectedMinutes, setSelectedMinutes] =
     useState<number>(25)
   const [secondsLeft, setSecondsLeft] =
@@ -253,6 +249,9 @@ export default function FocusPage() {
     typeof setInterval
   > | null>(null)
   const sessionSavedRef = useRef(false)
+  const endTimeRef = useRef<number | null>(null)
+  const timerRestoredRef = useRef(false)
+
   /* =========================
      SUBJECTS
   ========================= */
@@ -299,27 +298,96 @@ export default function FocusPage() {
     })
   }, [])
   /* =========================================================
+     RESTORE TIMER AFTER NAVIGATION
+  ========================================================= */
+  useEffect(() => {
+    let restored: {
+      selectedMinutes: number
+      secondsLeft: number
+      isRunning: boolean
+      endTime: number | null
+      selectedSubjectId: string
+    } | null = null
+
+    try {
+      const saved = sessionStorage.getItem(FOCUS_TIMER_KEY)
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved)
+        if (parsed && typeof parsed === "object") {
+          const timer = parsed as Record<string, unknown>
+          if (
+            sessionOptions.some((value) => value === timer.selectedMinutes) &&
+            typeof timer.secondsLeft === "number" &&
+            Number.isFinite(timer.secondsLeft) &&
+            timer.secondsLeft >= 0 &&
+            timer.secondsLeft <= (timer.selectedMinutes as number) * 60 &&
+            typeof timer.isRunning === "boolean" &&
+            (!timer.isRunning ||
+              (typeof timer.endTime === "number" &&
+                Number.isFinite(timer.endTime)))
+          ) {
+            restored = {
+              selectedMinutes: timer.selectedMinutes as number,
+              secondsLeft: timer.secondsLeft,
+              isRunning: timer.isRunning,
+              endTime: timer.isRunning ? (timer.endTime as number) : null,
+              selectedSubjectId:
+                typeof timer.selectedSubjectId === "string"
+                  ? timer.selectedSubjectId
+                  : "",
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to restore Focus timer:", error)
+    }
+
+    queueMicrotask(() => {
+      if (restored) {
+        const remaining = restored.isRunning && restored.endTime !== null
+          ? Math.max(0, Math.ceil((restored.endTime - Date.now()) / 1000))
+          : restored.secondsLeft
+
+        endTimeRef.current = remaining > 0 ? restored.endTime : null
+        setSelectedMinutes(restored.selectedMinutes)
+        setSecondsLeft(remaining)
+        setIsRunning(restored.isRunning && remaining > 0)
+        if (restored.selectedSubjectId) {
+          setSelectedSubjectId(restored.selectedSubjectId)
+        }
+      }
+      timerRestoredRef.current = true
+    })
+  }, [])
+
+  /* =========================================================
      TIMER EFFECT
   ========================================================= */
   useEffect(() => {
     if (!isRunning) {
       return
     }
-    intervalRef.current = setInterval(() => {
-      setSecondsLeft((previous) => {
-        if (previous <= 1) {
-          setIsRunning(false)
-          if (intervalRef.current) {
-            clearInterval(intervalRef.current)
-          }
-          return 0
-        }
-        return previous - 1
-      })
-    }, 1000)
+    const updateTimer = () => {
+      if (endTimeRef.current === null) {
+        return
+      }
+      const remaining = Math.max(
+        0,
+        Math.ceil((endTimeRef.current - Date.now()) / 1000)
+      )
+      setSecondsLeft(remaining)
+      if (remaining === 0) {
+        endTimeRef.current = null
+        setIsRunning(false)
+      }
+    }
+    updateTimer()
+    intervalRef.current = setInterval(updateTimer, 250)
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
+        intervalRef.current = null
       }
     }
   }, [isRunning])
@@ -368,25 +436,60 @@ export default function FocusPage() {
      TIMER ACTIONS
   ========================================================= */
   const changeSessionLength = (minutes: number) => {
+    endTimeRef.current = null
+    setIsRunning(false)
     setSelectedMinutes(minutes)
     setSecondsLeft(minutes * 60)
-    setIsRunning(false)
     sessionSavedRef.current = false
   }
   const resetTimer = () => {
-    setSecondsLeft(selectedMinutes * 60)
+    endTimeRef.current = null
     setIsRunning(false)
+    setSecondsLeft(selectedMinutes * 60)
     sessionSavedRef.current = false
   }
+  useEffect(() => {
+    if (!timerRestoredRef.current) {
+      return
+    }
+
+    sessionStorage.setItem(
+      FOCUS_TIMER_KEY,
+      JSON.stringify({
+        selectedMinutes,
+        secondsLeft,
+        isRunning,
+        endTime: endTimeRef.current,
+        selectedSubjectId,
+      })
+    )
+  }, [selectedMinutes, secondsLeft, isRunning, selectedSubjectId])
+
   const toggleTimer = () => {
     if (!selectedSubjectId) {
       setShowAddSubject(true)
       return
     }
+
     if (secondsLeft === 0) {
       return
     }
-    setIsRunning((previous) => !previous)
+    if (isRunning) {
+      // Pause and preserve the actual remaining time
+      if (endTimeRef.current !== null) {
+        const remaining = Math.max(
+          0,
+          Math.ceil((endTimeRef.current - Date.now()) / 1000)
+        )
+        setSecondsLeft(remaining)
+      }
+      endTimeRef.current = null
+      setIsRunning(false)
+    } else {
+      // Start or resume the timer
+      endTimeRef.current = Date.now() + secondsLeft * 1000
+      setIsRunning(true)
+    }
   }
   /* =========================================================
      ADD SUBJECT
