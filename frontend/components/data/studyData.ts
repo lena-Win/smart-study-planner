@@ -26,14 +26,14 @@ function isMood(value: unknown): value is FocusSession["mood"] {
     value === "restore"
 }
 
-function isFocusSubject(value: unknown): value is FocusSubject {
+export function isFocusSubject(value: unknown): value is FocusSubject {
   if (!isRecord(value)) return false
   return typeof value.id === "string" &&
     typeof value.name === "string" &&
     typeof value.color === "string"
 }
 
-function isFocusSession(value: unknown): value is FocusSession {
+export function isFocusSession(value: unknown): value is FocusSession {
   if (!isRecord(value)) return false
   return typeof value.id === "string" &&
     typeof value.subjectId === "string" &&
@@ -44,7 +44,7 @@ function isFocusSession(value: unknown): value is FocusSession {
     isMood(value.mood)
 }
 
-function isPlannerTask(value: unknown): value is PlannerTask {
+export function isPlannerTask(value: unknown): value is PlannerTask {
   if (!isRecord(value)) return false
   return typeof value.id === "string" &&
     typeof value.text === "string" &&
@@ -55,7 +55,7 @@ function isPlannerTask(value: unknown): value is PlannerTask {
     typeof value.createdAt === "string"
 }
 
-function isJournalEntry(value: unknown): value is JournalEntry {
+export function isJournalEntry(value: unknown): value is JournalEntry {
   if (!isRecord(value)) return false
   return typeof value.id === "string" &&
     typeof value.text === "string" &&

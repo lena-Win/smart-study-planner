@@ -1,6 +1,10 @@
 "use client"
+
+import { useRef, useState } from "react"
 import {
   Check,
+  Download,
+  Upload,
   CloudSun,
   Focus,
   Heart,
@@ -16,6 +20,11 @@ import AppShell from "@/components/layout/AppShell"
 import { useMood } from "@/components/theme/MoodContext"
 import { useTheme, type Theme } from "@/components/theme/ThemeContext"
 import type { MoodId } from "@/components/mood/moodData"
+import {
+  exportStudyZenData,
+  importStudyZenData,
+  validateStudyZenBackup,
+} from "@/components/data/backup"
 type MoodOption = {
   id: MoodId
   name: string
@@ -101,6 +110,64 @@ export default function SettingsPage() {
   const { mood, setMood } = useMood()
   const { theme, setTheme } = useTheme()
   const isNight = theme === "night"
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [backupMessage, setBackupMessage] = useState("")
+  const [backupError, setBackupError] = useState(false)
+
+  const handleExport = () => {
+    try {
+      exportStudyZenData()
+      setBackupMessage("Backup downloaded successfully.")
+      setBackupError(false)
+    } catch (error) {
+      console.error("Backup export failed:", error)
+      setBackupMessage("Could not export your data.")
+      setBackupError(true)
+    }
+  }
+
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Backup file is too large.")
+      }
+
+      const content = await file.text()
+      const parsed: unknown = JSON.parse(content)
+
+      if (!validateStudyZenBackup(parsed)) {
+        throw new Error("Invalid or unsupported backup file.")
+      }
+
+      const confirmed = window.confirm(
+        "Importing this backup will replace your current Focus, Planner and Journal data. Continue?"
+      )
+
+      if (!confirmed) {
+        setBackupMessage("Import cancelled. Your data was not changed.")
+        setBackupError(false)
+        return
+      }
+
+      importStudyZenData(parsed)
+      window.alert(
+        "Your data has been restored successfully. The page will now reload."
+      )
+      window.location.reload()
+    } catch (error) {
+      console.error("Backup import failed:", error)
+      setBackupMessage(
+        error instanceof Error ? error.message : "Could not import your backup."
+      )
+      setBackupError(true)
+    } finally {
+      event.target.value = ""
+    }
+  }
+
   const mainSurface = {
     background: isNight
       ? `
@@ -476,6 +543,100 @@ export default function SettingsPage() {
                   )
                 })}
               </div>
+            </div>
+          </section>
+          <section
+            className="relative rounded-[54px] p-7 sm:p-9 lg:p-12 mb-10 overflow-hidden backdrop-blur-3xl"
+            style={mainSurface}
+          >
+            <div className="relative z-10">
+              <div
+                className="flex items-center gap-2 uppercase tracking-[0.28em] text-xs mb-3"
+                style={{ color: "var(--mood-main)" }}
+              >
+                <Download size={14} />
+                <span>Backup &amp; restore</span>
+              </div>
+
+              <h2
+                className="text-4xl mb-3"
+                style={{
+                  color: isNight
+                    ? "rgba(255,255,255,.94)"
+                    : "var(--text-primary)",
+                }}
+              >
+                Your data
+              </h2>
+
+              <p
+                className="leading-relaxed max-w-xl mb-8"
+                style={{
+                  color: isNight
+                    ? "rgba(255,255,255,.52)"
+                    : "var(--text-secondary)",
+                }}
+              >
+                Keep your study progress safe. Download a backup of your Focus,
+                Planner and Journal data, or restore it from a previously saved file.
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-5">
+                <button
+                  type="button"
+                  onClick={handleExport}
+                  className="rounded-[32px] p-6 text-left cursor-pointer transition-all duration-300 hover:-translate-y-1"
+                  style={softSurface}
+                >
+                  <Download
+                    size={24}
+                    className="mb-4"
+                    style={{ color: "var(--mood-main)" }}
+                  />
+                  <h3 className="text-xl text-primary mb-2">Export data</h3>
+                  <p className="text-sm text-secondary leading-relaxed">
+                    Download a JSON backup of your study progress.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="rounded-[32px] p-6 text-left cursor-pointer transition-all duration-300 hover:-translate-y-1"
+                  style={softSurface}
+                >
+                  <Upload
+                    size={24}
+                    className="mb-4"
+                    style={{ color: "var(--mood-main)" }}
+                  />
+                  <h3 className="text-xl text-primary mb-2">Import data</h3>
+                  <p className="text-sm text-secondary leading-relaxed">
+                    Restore your progress from a backup file.
+                  </p>
+                </button>
+              </div>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".json,application/json"
+                onChange={handleImport}
+                className="hidden"
+                aria-label="Choose Study Zen backup file"
+              />
+
+              {backupMessage && (
+                <p
+                  role={backupError ? "alert" : "status"}
+                  className="mt-6 text-sm leading-relaxed"
+                  style={{
+                    color: backupError ? "#d97777" : "var(--mood-main)",
+                  }}
+                >
+                  {backupMessage}
+                </p>
+              )}
             </div>
           </section>
           <section className="mt-10">
