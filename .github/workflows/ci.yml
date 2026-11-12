@@ -3,6 +3,7 @@ name: Study Zen CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   quality-checks:
