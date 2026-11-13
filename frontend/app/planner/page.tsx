@@ -1571,7 +1571,7 @@ export default function PlannerPage() {
                           onClick={() =>
                             deleteTask(task.id)
                           }
-                          aria-label="Delete plan"
+                          aria-label={'Delete plan: ${task.title'}
                           className="
                             w-9
                             h-9
@@ -1583,6 +1583,7 @@ export default function PlannerPage() {
                             opacity-60
                             lg:opacity-0
                             lg:group-hover:opacity-60
+                            focus-visible:!opacity-100
                             hover:!opacity-100
                             transition-all
                           "
